@@ -599,30 +599,73 @@ open_lxqt()
     fi
 }
 
-[ x"$1" != x"" ] || exit_failure_syntax
+open_one_argument()
+{
+    url="$1"
+    case "$DE" in
+        kde)
+            open_kde "$url"
+            ;;
 
-url=
-while [ $# -gt 0 ] ; do
-    parm="$1"
-    shift
+        deepin)
+            open_deepin "$url"
+            ;;
 
-    case "$parm" in
-      -*)
-        exit_failure_syntax "unexpected option '$parm'"
-        ;;
+        gnome3|cinnamon)
+            open_gnome3 "$url"
+            ;;
 
-      *)
-        if [ -n "$url" ] ; then
-            exit_failure_syntax "unexpected argument '$parm'"
-        fi
-        url="$parm"
-        ;;
+        gnome)
+            open_gnome "$url"
+            ;;
+
+        mate)
+            open_mate "$url"
+            ;;
+
+        xfce)
+            open_xfce "$url"
+            ;;
+
+        lxde)
+            open_lxde "$url"
+            ;;
+
+        lxqt)
+            open_lxqt "$url"
+            ;;
+
+        enlightenment)
+            open_enlightenment "$url"
+            ;;
+
+        cygwin)
+            open_cygwin "$url"
+            ;;
+
+        darwin)
+            open_darwin "$url"
+            ;;
+
+        flatpak)
+            open_flatpak "$url"
+            ;;
+
+        wsl)
+            open_wsl "$url"
+            ;;
+
+        generic)
+            open_generic "$1"
+            ;;
+
+        *)
+            exit_failure_operation_impossible "no method available for opening '$1'"
+            ;;
     esac
-done
+}
 
-if [ -z "${url}" ] ; then
-    exit_failure_syntax "file or URL argument missing"
-fi
+[ x"$1" != x"" ] || exit_failure_syntax
 
 detectDE
 
@@ -642,64 +685,34 @@ case "${BROWSER}" in
         ;;
 esac
 
-case "$DE" in
-    kde)
-    open_kde "$url"
-    ;;
+# Handle the URL arguments and script-specific options.
+NOWAIT=0
+err=0
+while [ $# -gt 0 ]; do
+    parm="$1"
+    shift
 
-    deepin)
-    open_deepin "$url"
-    ;;
+    case "$parm" in
+        --nowait)
+            shift
+            NOWAIT=1
+            ;;
 
-    gnome3|cinnamon)
-    open_gnome3 "$url"
-    ;;
+        -*)
+            exit_failure_syntax "unexpected option '$parm'"
+            ;;
 
-    gnome)
-    open_gnome "$url"
-    ;;
-
-    mate)
-    open_mate "$url"
-    ;;
-
-    xfce)
-    open_xfce "$url"
-    ;;
-
-    lxde)
-    open_lxde "$url"
-    ;;
-
-    lxqt)
-    open_lxqt "$url"
-    ;;
-
-    enlightenment)
-    open_enlightenment "$url"
-    ;;
-
-    cygwin)
-    open_cygwin "$url"
-    ;;
-
-    darwin)
-    open_darwin "$url"
-    ;;
-
-    flatpak)
-    open_flatpak "$url"
-    ;;
-
-    wsl)
-    open_wsl "$url"
-    ;;
-
-    generic)
-    open_generic "$url"
-    ;;
-
-    *)
-    exit_failure_operation_impossible "no method available for opening '$url' in environment (DE) '$DE'"
-    ;;
-esac
+        *)
+            if [ $# -gt 0 ] || [ $NOWAIT = 1 ]; then
+                (open_one_argument "$parm" &)
+            else
+                (open_one_argument "$parm")
+            fi
+            this_err=$?
+            if [ $err -eq 0 ]; then
+                err=$this_err
+            fi
+            ;;
+    esac
+done
+exit $err
