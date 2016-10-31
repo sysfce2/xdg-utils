@@ -461,8 +461,9 @@ my $x = X11::Protocol->new();
 my $named_window_id = hex($window_id);
 my $window_name;
 while (1) {
-  ($window_name) = $x->GetProperty($named_window_id, $x->atom("WM_NAME"),
-				   $x->atom("STRING"), 0, 1000, 0);
+  eval { ($window_name) = $x->GetProperty($named_window_id, $x->atom("WM_NAME"),
+				   $x->atom("STRING"), 0, 1000, 0); };
+  $window_name = "?" if $@;
   last if defined($window_name) && $window_name ne "";
   (undef, $named_window_id) = $x->QueryTree($named_window_id);
   if (!defined($named_window_id)) {
