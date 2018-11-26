@@ -119,6 +119,14 @@ perform_action()
       xautolock_screensaver "$1"
       ;;
 
+    xss-lock_screensaver)
+      if [ "$1" = "lock" ]; then
+        screensaver_xserver "activate"
+      else
+        screensaver_xserver "$1"
+      fi
+      ;;
+
     xfce)
       [ -n "$DISPLAY" ] && screensaver_xserver "$1"
       ;;
@@ -899,6 +907,8 @@ dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.fr
 dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.cinnamon.ScreenSaver > /dev/null 2>&1 && DE="cinnamon"
 # Consider "xautolock" a separate DE
 xautolock -enable > /dev/null 2>&1 && DE="xautolock_screensaver"
+# Consider "xss-lock" a separate DE
+xss-lock --version > /dev/null 2>&1 && ps x -o cmd | grep -q '^xss-lock' && DE="xss-lock_screensaver"
 
 if [ "$action" = "resume" ] ; then
     do_resume
