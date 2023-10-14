@@ -444,7 +444,11 @@ mailto="$(echo "${mailto}"| sed 's/[?&]$//')"
 [ x"${mailto}" != x"" ] || exit_failure_syntax
 
 if command -v @NAME@-hook.sh > /dev/null; then
-    @NAME@-hook.sh "${mailto}" "$attach"
+	if [ -z "$attach" ] ; then
+	    @NAME@-hook.sh "${mailto}"
+	else
+	    @NAME@-hook.sh "${mailto}" --attach-files "$attach"
+	fi
     if [ $? -eq 0 ]; then
         exit_success
     else
