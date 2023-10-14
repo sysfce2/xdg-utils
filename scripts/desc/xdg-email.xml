@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl"
    href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+    "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
 <refentry id="xdg-email">
   <refentryinfo>
@@ -76,6 +76,11 @@
       actually sending the e-mail.
     </para>
     <para>
+      Do not use xdg-email as the default handler for <code>mailto:</code> links.
+      Its main purpose is to assemble <code>mailto:</code> links and hand them over
+      to a capable program (usually the defult handler for <code>mailto:</code> links.
+    </para>
+    <para>
       xdg-email is for use inside a desktop session only.
       It is not recommended to use xdg-email as root.
     </para>
@@ -147,6 +152,9 @@
 	    Some e-mail applications require the file to remain present
             after xdg-email returns.
 	  </simpara>
+	  <simpara>
+         The attach option currently is only implemented for Thunderbird and Icedove on Gnome, Cinnamon, Lxde, Mate, Deepin, KDE, Lxqt and generic desktops with thunderbird as the mailclient or through a custom <command>xdg-email-hook.sh</command>. It will not work with the <envar>MAILE</envar> environment variable.
+	  </simpara>
 	</listitem>
       </varlistentry>
       
@@ -185,7 +193,7 @@
     </para>
     <variablelist>
       <varlistentry>
-	<term>XDG_UTILS_DEBUG_LEVEL</term>
+	<term><envar>XDG_UTILS_DEBUG_LEVEL</envar></term>
 	<listitem>
 	  <simpara>
 	    Setting this environment variable to a non-zero numerical value
@@ -194,7 +202,44 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
+      <varlistentry>
+	<term><envar>MAILER</envar></term>
+	<listitem>
+      <simpara>
+	      With this variable a custom command can be set as opener
+	      for <code>mailto:</code> links, when set it will be preferred
+	      over desktop specific behavior unless a <command>xdg-email-hook.sh</command> is present.
+      </simpara>
+	  <simpara>
+	      The set command will be run with the URI appended as the last argument.
+      </simpara>
+      <simpara>
+	      The <envar>MAILER</envar> is not standardized, keep the command as simple as possible.
+      </simpara>
+	</listitem>
+      </varlistentry>
     </variablelist>
+  </refsect1>
+  <refsect1 id="hook">
+	<title>Hook Script</title>
+	<para>
+      If a <command>xdg-email-hook.sh</command> command is present, it will
+      be used as the opener.
+    </para>
+    <para>
+      It is called with the URL as it's first argument:
+      <command>xdg-email-hook.sh</command> <replaceable>mailto_URL</replaceable>
+    </para>
+    <para>
+      If an attachment is specified it will be called
+      with an additional <option>--attach-files</option> option
+      followed by a list of one or more URI-encoded, comma seperated filepaths.
+      (This is compatible with the <command>thunderbird</command> <option>-compose</option> option)
+    </para>
+    <para>
+      Like this: <command>xdg-email-hook.sh</command> <replaceable>mailto_URL</replaceable>
+      <option>--attach-files</option> <replaceable>file-list</replaceable>
+    </para>
   </refsect1>
   <refsect1 id="exitcodes">
     <title>Exit Codes</title>
