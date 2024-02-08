@@ -7,3 +7,8 @@ disable=SC2181
 # x prefixes aren't pretty anymore,
 # but they don't hurt either.
 disable=SC2268
+
+# While local isn't exactly great
+# this warning produces unceccessary noise
+# distracting from more urgent issues
+disable=3043
