@@ -153,7 +153,7 @@
             after xdg-email returns.
 	  </simpara>
 	  <simpara>
-         The attach option currently is only implemented for Thunderbird and Icedove on Gnome, Cinnamon, Lxde, Mate, Deepin, KDE, Lxqt and generic desktops with thunderbird as the mailclient or through a custom <command>xdg-email-hook.sh</command>. It will not work with the <envar>MAILE</envar> environment variable.
+         The attach option currently is only implemented for Thunderbird and Icedove on Gnome, Cinnamon, Lxde, Mate, Deepin, KDE, Lxqt and generic desktops with thunderbird as the mailclient or through a custom <command>xdg-email-hook.sh</command>. It will not work with the <envar>MAILER</envar> environment variable.
 	  </simpara>
 	</listitem>
       </varlistentry>
