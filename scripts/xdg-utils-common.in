@@ -311,6 +311,19 @@ detectDE()
     # see https://bugs.freedesktop.org/show_bug.cgi?id=34164
     unset GREP_OPTIONS
 
+    # Tool specific desktop override
+    xdg_util="$(basename -- "$0" | sed 's/^xdg-//' | tr '[:lower:]' '[:upper:]')"
+    # printenv isn't posix, but implemented by almost all coreutils packages
+    DE="$(printenv -- "XDG_UTILS_${xdg_util}_OVERRIDE_DE")"
+    unset xdg_util
+    [ -z "$DE" ] || return
+
+    # General desktop override
+    if [ -n "${XDG_UTILS_OVERRIDE_DE}" ]; then
+        DE="${XDG_UTILS_OVERRIDE_DE}"
+        return
+    fi
+
     IFS=:
     for desktop in $XDG_CURRENT_DESKTOP ; do
       unset IFS

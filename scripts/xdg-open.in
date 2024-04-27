@@ -672,6 +672,6 @@ case "$DE" in
     ;;
 
     *)
-    exit_failure_operation_impossible "no method available for opening '$url'"
+    exit_failure_operation_impossible "no method available for opening '$url' in environment (DE) '$DE'"
     ;;
 esac
