@@ -148,6 +148,24 @@
 	  In case of success the process launched from the .desktop file will not be forked off and therefore may result in xdg-open running for a very long time. This behaviour intentionally differs from most desktop specific openers to allow terminal based applications to run using the same terminal xdg-open was called from.
     </para>
   </refsect1>
+  
+  <refsect1>
+    <title>Environment</title>
+    <para>xdg-open honors the following environment variables:</para>
+    <variablelist>
+      <varlistentry>
+	    <term><envar>BROWSER</envar></term>
+	    <listitem>
+		    <para>May contain a command that is used to open a filepath or URL when no other appropriate opener was found. The Path or URL will be appended as the last argument.</para>
+		    <para>No parsing beyond splitting arguments on space characters should be assumed. Quoting is not supported. Be careful with ':' and '%' characters.</para>
+		    <para>The following two features are supported in xdg-open only, but not by other applications that make use of the <envar>BROWSER</envar> variable. Using them is no longer recommended.</para>
+		    <para>This environment variable may contain a colon separated list of commands if one command fails the command after it will be tried.</para>
+		    <para>When using <code>%s</code> as a placeholder the first instance of it will be replaced with the filepath or URL to be opened instead of appending it as the last argument.</para>
+	    </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  
   <refsect1 id="reporting-issues">
     <title>Reporting Issues</title>
     <para>
