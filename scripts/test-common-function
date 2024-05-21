@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# This script is for testing internal functions of the xdg-utils-common.in file
+#
+# Example ./test-common-function xdg_which echo
+
+XDG_UTILS_DEBUG_LEVEL="${XDG_UTILS_DEBUG_LEVEL:-99}"
+
+. ./xdg-utils-common.in
+
+"$@"
+
+exit $?
