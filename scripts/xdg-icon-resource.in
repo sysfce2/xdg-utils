@@ -148,8 +148,8 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "size argument missing for --size"
         fi
-        if echo "$1" | grep '[^0-9]' > /dev/null 2> /dev/null; then
-            exit_failure_syntax "size argument must be numeric"
+        if ! echo "$1" | grep '^\(scalable\|[0-9]\+\)$' > /dev/null 2> /dev/null; then
+            exit_failure_syntax "size argument must be numeric or the word 'scalable'"
         fi
         size="$1"
         shift
@@ -275,7 +275,12 @@ extension=
 if [ -z "$size" ] ; then
     exit_failure_syntax "the icon size must be specified with --size"
 fi
-xdg_size_name="${size}x${size}"
+
+if [ "$size" = "scalable" ]; then
+    xdg_size_name="$size"
+else
+    xdg_size_name="${size}x${size}"
+fi
 
 if [ x"$action" = x"install" ] ; then
     case "$icon_file" in
@@ -285,15 +290,31 @@ if [ x"$action" = x"install" ] ; then
       *.png)
         extension="png"
         ;;
+      *.svg)
+        extension="svg"
+        ;;
       *)
-        exit_failure_syntax "icon file to install must be a *.png or *.xpm file"
+        exit_failure_syntax "icon file to install must be a *.png, *.svg, or *.xpm file"
         ;;
     esac
+fi
+
+if [ "$xdg_size_name" = "scalable" ]; then
+    if [ "$extension" = "png" ]; then
+        exit_failure_syntax "png icons cannot be scalable"
+    fi
+
+    if [ "$extension" = "xpm" ]; then
+        exit_failure_syntax "xpm icons cannot be scalable"
+    fi
 fi
 
 if [ -n "$icon_name" ] ; then
     case "$icon_name" in
       *.png)
+         exit_failure_syntax "icon name should not include an extension"
+         ;;
+      *.svg)
          exit_failure_syntax "icon name should not include an extension"
          ;;
       *.xpm)
@@ -426,15 +447,16 @@ case "$action" in
     uninstall)
         for icon_dir in "$xdg_dir" "$dot_icon_dir"; do
             [ -z "$icon_dir" ] && continue
-            rm -f "$icon_dir/$icon_name.xpm" "$icon_dir/$icon_name.png"
+            rm -f "$icon_dir/$icon_name.xpm" "$icon_dir/$icon_name.png" "$icon_dir/$icon_name.svg"
             rm -f "$icon_dir/$icon_icon_name"
             if [ -n "$need_gnome_mime" ] ; then
                 rm -f "$icon_dir/gnome-mime-$icon_name.xpm"
                 rm -f "$icon_dir/gnome-mime-$icon_name.png"
+                rm -f "$icon_dir/gnome-mime-$icon_name.svg"
             fi
         done
         if [ -n "$kde_dir" ] ; then
-            rm -f "$kde_dir/$icon_name.xpm" "$kde_dir/$icon_name.png"
+            rm -f "$kde_dir/$icon_name.xpm" "$kde_dir/$icon_name.png" "$kde_dir/$icon_name.svg"
         fi
 
         ;;

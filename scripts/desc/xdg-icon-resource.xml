@@ -83,8 +83,8 @@
       The desktop icon system identifies icons by name. Depending on the
       required size, the choice of icon theme and the context in which the
       icon is used, the desktop icon system locates an appropriate
-      icon resource to depict an icon. Icon resources can be XPM files or
-      PNG files. 
+      icon resource to depict an icon. Icon resources can be XPM files,
+      PNG files, or SVG files. 
     </para>
     <para>
       The desktop icon system works according to the
@@ -105,8 +105,8 @@
             Icon names do not have an extension.
             If <replaceable>icon-name</replaceable> is not provided the name is
             derived from <replaceable>icon-file</replaceable>.
-            The icon file must have
-            <emphasis>.png</emphasis> or <emphasis>.xpm</emphasis>
+            The icon file must have <emphasis>.png</emphasis>,
+            <emphasis>.svg</emphasis>, or <emphasis>.xpm</emphasis>
             as extension. If a corresponding <emphasis>.icon</emphasis>
             file exists in the same location as <replaceable>icon-file</replaceable>
             it will be installed as well.
