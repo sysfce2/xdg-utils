@@ -98,6 +98,10 @@ desktop_file_to_binary()
 					print substr($2,RSTART,RLENGTH)
 				}' \
             	< "$file_path" )"
+            if [ -z "$binary" ] ; then
+                DEBUG 2 "No or empty Exec key in .desktop file. Search failed."
+                return
+            fi
             DEBUG 2 "Found command: $binary"
             binary="$(xdg_which "$binary")"
             DEBUG 2 "Resolved to command to file: '$binary'"

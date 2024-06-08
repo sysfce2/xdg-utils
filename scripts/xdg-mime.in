@@ -654,6 +654,13 @@ if [ "$action" = "makedefault" ]; then
 
     detectDE
 
+	binary="$(desktop_file_to_binary "$filename")"
+	if [ -z "$binary" ] ; then
+		echo "The given .desktop file doesn't exist or doesn't have an Exec key that points to a program."
+		echo "To get more information run with: XDG_UTILS_DEBUG_LEVEL=4 xdg-mime makedefault …" >&2
+		exit_failure_file_missing
+	fi
+
     while [ $# -gt 0 ] ; do
         case $1 in
           -*)
