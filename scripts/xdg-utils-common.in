@@ -515,3 +515,18 @@ xdg_which()
 		return 1
 	fi
 }
+
+#----------------------------------------------------------------------------
+# Helper function that returns the value for `$XDG_CONFIG_HOME`,
+# independent of it being explicitly set or simply a fallback.
+
+# get_xdg_config_home
+get_xdg_config_home()
+{
+	# Only use XDG_CONFIG_HOME if it is an absolute path
+	if printf "%s" "$XDG_CONFIG_HOME" | grep -q '^/' ; then
+		printf "%s\n" "$XDG_CONFIG_HOME"
+	else
+		printf "%s\n" "$HOME/.config"
+	fi
+}

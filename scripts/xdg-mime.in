@@ -167,7 +167,7 @@ make_default_kde()
     vendor="$1"
     mimetype="$2"
     if [ "${KDE_SESSION_VERSION:-0}" -gt 4 ] ; then
-        default_dir="$(qtpaths --writable-path ConfigLocation)"
+        default_dir="$(get_xdg_config_home)"
         default_file="$default_dir/mimeapps.list"
     elif [ x"$KDE_SESSION_VERSION" = x"4" ]; then
         default_dir="$(kde4-config --path xdgdata-apps 2> /dev/null | cut -d ':' -f 1)"
@@ -294,10 +294,7 @@ make_default_generic()
     # $1 is vendor-name.desktop
     # $2 is mime/type
     # Add $2=$1 to XDG_CONFIG_HOME/mimeapps.list
-    #shellcheck disable=SC2153 # not misspelled
-    xdg_config_home="$XDG_CONFIG_HOME"
-    [ -n "$xdg_config_home" ] || xdg_config_home="$HOME/.config"
-    default_file="$xdg_config_home/mimeapps.list"
+    default_file="$(get_xdg_config_home)/mimeapps.list"
     if [ -L "$default_file" ]; then
         out_file="$(xdg_realpath "$default_file")"
     else
@@ -459,8 +456,7 @@ check_mimeapps_list()
 defapp_generic()
 {
     MIME="$1"
-    xdg_config_home="$XDG_CONFIG_HOME"
-    [ -n "$xdg_config_home" ] || xdg_config_home="$HOME/.config"
+    xdg_config_home="$(get_xdg_config_home)"
     #shellcheck disable=SC2153 # not misspelled
     xdg_config_dirs="$XDG_CONFIG_DIRS"
     [ -n "$xdg_config_dirs" ] || xdg_config_dirs="/etc/xdg"
