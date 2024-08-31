@@ -524,9 +524,9 @@ xdg_which()
 get_xdg_config_home()
 {
 	# Only use XDG_CONFIG_HOME if it is an absolute path
-	if printf "%s" "$XDG_CONFIG_HOME" | grep -q '^/' ; then
-		printf "%s\n" "$XDG_CONFIG_HOME"
-	else
-		printf "%s\n" "$HOME/.config"
-	fi
+	# shellcheck disable=SC2153 # not misspelled
+	case "$XDG_CONFIG_HOME" in
+		/*) printf "%s\n" "$XDG_CONFIG_HOME" ;;
+		*) printf "%s\n" "$HOME/.config" ;;
+	esac
 }
