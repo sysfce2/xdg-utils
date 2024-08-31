@@ -505,23 +505,29 @@ xdg_realpath()
 # xdg_which <command>
 xdg_which()
 {
-	if [ -z "$1" ] ; then
-		return 1
-	elif [ -x "$1" ] ; then
-		printf "%s\n" "$1"
-	else
-		# this should be faster than the real thing because of shell builtins
-		old_ifs="$IFS"
-		IFS=:
-		for p in $PATH ; do
-			IFS="$old_ifs"
-			if [ -x "$p/$1" ] ; then
-				printf "%s\n" "$p/$1"
-				return
+	case "$1" in
+		'') return 1 ;;
+		*/*)
+			# We got a path containing slashes, test if it is executable
+			# and return its absolute path with symlinks resolved.
+			if [ -x "$1" ] ; then
+				xdg_realpath "$1"
+				return 0
 			fi
-		done
-		return 1
-	fi
+			return 1
+			;;
+	esac
+	# search PATH for command
+	old_ifs="$IFS"
+	IFS=:
+	for p in $PATH ; do
+		IFS="$old_ifs"
+		if [ -x "$p/$1" ] ; then
+			printf "%s\n" "$p/$1"
+			return
+		fi
+	done
+	return 1
 }
 
 #----------------------------------------------------------------------------
