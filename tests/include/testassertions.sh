@@ -264,6 +264,24 @@ assert_stdout() {
     fi
 }
 
+assert_stdout_equals() {
+# check that stdout equals the given first argument.
+# Only suitable for cases where the output should behave even in the error case
+# in therms of size.
+	if [ ! -s out.stdout ]
+	then
+		test_infoline "Expected output from '$LASTCOMMAND' to stdout, but none written"
+		test_fail
+		return
+	fi
+	content="$(cat out.stdout)"
+	if [ "$content" = "$1" ] ; then
+		return # success
+	fi
+	test_fail "Expected '$1' as output, got '$content'."
+}
+
+
 require_interactive() {
 # if $XDG_TEST_NO_INTERACTIVE is set, test result becomes UNTESTED
     if [ ! -z "$XDG_TEST_NO_INTERACTIVE" ] ; then
