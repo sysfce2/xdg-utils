@@ -70,6 +70,12 @@
     <para>
       It is strongly recommended to call xdg-realpath using the <option>--</option> option.
     </para>
+    <para>
+      When using xdg-realpath with multiple files and one of the given paths leads directly or indirectly to a missing file a message will be printed to stdout and xdg-realpath will continue resolving until it has finished with all given paths. If at least one path does not resolve, it will return an exit code 2.
+    </para>
+    <para>
+      Unlike <command>realpath</command> or <command>readlink -f</command> xdg-realpath will error if one attempts to resolve a non-existing file in an existing directory. If such behavior is added in the future it will be behind a command line flag.
+    </para>
   </refsect1>
   <refsect1 id="options">
     <title>Options</title>
