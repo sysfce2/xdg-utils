@@ -78,7 +78,7 @@ while [ "$J" -le "$LENGTH" ] ; do
 	while [ "$I" -le "$VARS" ] ; do
 		## Assign each value to appropriate variable
 		eval "var=\$v$I"
-		eval "value=\$$(( ($I-1)*$LENGTH+$J ))"
+		eval "value=\${$(( ($I-1)*$LENGTH+$J ))}"
 		#echo "$var: $value"
 		str="$str
 		$var=\"$value\""
