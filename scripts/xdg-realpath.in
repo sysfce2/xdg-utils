@@ -33,10 +33,18 @@ set -e
 past_double_hyphen=""
 exit_with_missing_status=""
 
+run_realpath() {
+	if [ -e "$1" ] ; then
+		xdg_realpath "$1"
+	else
+		echo "@NAME@: $1: No such file or directory" >&2
+		exit_with_missing_status=y
+	fi
+}
+
 while [ $# -gt 0 ] ; do
 	if [ -n "$past_double_hyphen" ] ; then
-		[ -e "$1" ] || echo "@NAME@: $1: No such file or directory" >&2
-		xdg_realpath "$1"
+		run_realpath "$1"
 	else
 		case "$1" in
 			--)
@@ -50,7 +58,7 @@ while [ $# -gt 0 ] ; do
 				exit_failure_syntax "Unknown option: '$1'"
 				;;
 			*)
-				xdg_realpath "$1"
+				run_realpath "$1"
 				;;
 		esac
 	fi
