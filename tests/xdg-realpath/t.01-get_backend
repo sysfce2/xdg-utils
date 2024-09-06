@@ -1,0 +1,34 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh" 
+
+test_realpath_get_backend() {
+
+	# required to begin a test
+	test_start "Test xdg-realpath --get-backend"
+
+	# optionally provide a verbose description. (not used)
+	test_purpose "Verify that xdg-realpath can provide backend information"
+
+	# optionally begin a prerequisite section.
+	# assertions that fail here cause NORESULT
+	# rather than FAIL
+	test_init
+
+	# pre-assertions go here
+
+	# required to begin the actual test assertions
+	test_procedure
+
+	assert_exit 0 xdg-realpath --get-backend
+	assert_nostderr
+	assert_stdout
+
+	# required to generate result codes.
+	# Must be last
+	test_result
+}
+
+run_test test_realpath_get_backend

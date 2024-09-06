@@ -1,0 +1,41 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh" 
+
+test_realpath_trivial_not_found() {
+
+	# required to begin a test
+	test_start "Test trivial cases of xdg-realpath failing on non-existant files"
+
+	# optionally provide a verbose description. (not used)
+	test_purpose "Verify that xdg-realpath fails for non existing files and dead symlinks"
+
+	# optionally begin a prerequisite section.
+	# assertions that fail here cause NORESULT
+	# rather than FAIL
+	test_init
+
+	# pre-assertions go here
+
+	# required to begin the actual test assertions
+	test_procedure
+
+	test_infoline "Test for path: '$INPUT'"
+
+	# expect exit code 2 for file not found
+	assert_exit 2 xdg-realpath "$INPUT"
+	assert_stderr
+	assert_nostdout
+	
+	# required to generate result codes.
+	# Must be last
+	test_result
+}
+
+repeat_test test_realpath_trivial_not_found 1 INPUT \
+	"/path/that/does/not/exist" \
+	"/non_existing_file_in_existing_directory" \
+	"./file_that_does_not_exist" \
+	"$XDG_TEST_DIR/xdg-realpath/data/symlink_to_non_existing"

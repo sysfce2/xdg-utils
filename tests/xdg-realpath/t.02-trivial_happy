@@ -1,0 +1,48 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh" 
+
+test_realpath_trivial_happy() {
+
+	# required to begin a test
+	test_start "Test trivial cases of xdg-realpath"
+
+	# optionally provide a verbose description. (not used)
+	test_purpose "Verify that xdg-realpath works for regular directories and files"
+
+	# optionally begin a prerequisite section.
+	# assertions that fail here cause NORESULT
+	# rather than FAIL
+	test_init
+
+	# pre-assertions go here
+
+	# required to begin the actual test assertions
+	test_procedure
+
+	test_infoline "Test for path: '$INPUT'"
+
+	assert_exit 0 xdg-realpath "$INPUT"
+	assert_nostderr
+	assert_stdout_equals "$OUTPUT"
+	
+	# required to generate result codes.
+	# Must be last
+	test_result
+}
+
+repeat_test test_realpath_trivial_happy 2 INPUT OUTPUT \
+	"/" "/./" "$XDG_TEST_DIR/xdg-realpath/../" \
+	"$XDG_TEST_DIR/xdg-realpath/data/regular_file" \
+	"$XDG_TEST_DIR/xdg-realpath/data/regular_directory" \
+	"$XDG_TEST_DIR/xdg-realpath/data/symlink_to_regular_file" \
+	"$XDG_TEST_DIR/xdg-realpath/data/symlink_to_regular_directory" \
+	"$XDG_TEST_DIR/xdg-realpath/data/symlink_to_root" \
+	"/" "/" "$XDG_TEST_DIR" \
+	"$XDG_TEST_DIR/xdg-realpath/data/regular_file" \
+	"$XDG_TEST_DIR/xdg-realpath/data/regular_directory" \
+	"$XDG_TEST_DIR/xdg-realpath/data/regular_file" \
+	"$XDG_TEST_DIR/xdg-realpath/data/regular_directory" \
+	"/"

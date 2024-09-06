@@ -1,0 +1,37 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh" 
+
+test_realpath_multi_happy() {
+
+	# required to begin a test
+	test_start "Test multiple paths to xdg-realpath"
+
+	# optionally provide a verbose description. (not used)
+	test_purpose "Verify that xdg-realpath works with multiple arguments"
+
+	# optionally begin a prerequisite section.
+	# assertions that fail here cause NORESULT
+	# rather than FAIL
+	test_init
+
+	# pre-assertions go here
+
+	# required to begin the actual test assertions
+	test_procedure
+
+	assert_exit 0 xdg-realpath "/" "." -- "$XDG_TEST_DIR" "$XDG_TEST_DIR/xdg-realpath"
+	assert_nostderr
+	assert_stdout_equals "/
+$PWD
+$XDG_TEST_DIR
+$XDG_TEST_DIR/xdg-realpath"
+
+	# required to generate result codes.
+	# Must be last
+	test_result
+}
+
+run_test test_realpath_multi_happy
