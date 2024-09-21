@@ -502,7 +502,9 @@ while (1) {
 screensaver_gnome_screensaver()
 {
 # DBUS interface for gnome-screensaver
-# http://people.gnome.org/~mccann/gnome-screensaver/docs/gnome-screensaver.html
+# https://gitlab.gnome.org/Archive/gnome-screensaver/-/blob/master/doc/dbus-interface.xml
+# as well as gnome-shell
+# https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/data/dbus-interfaces/org.gnome.ScreenSaver.xml
     case "$1" in
         suspend)
         screensaver_dbus_process $window_id $screensaver_file "org.gnome.SessionManager" "/org/gnome/SessionManager"
@@ -541,8 +543,9 @@ screensaver_gnome_screensaver()
                   --dest=org.gnome.ScreenSaver \
                   --type=method_call \
                   /org/gnome/ScreenSaver \
-                  org.gnome.ScreenSaver.SimulateUserActivity \
-                 2> /dev/null
+                  org.gnome.ScreenSaver.SetActive \
+                  boolean:false \
+                  2> /dev/null
         result=$?
         ;;
 
