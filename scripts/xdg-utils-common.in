@@ -303,8 +303,10 @@ detectDE()
     # see https://bugs.freedesktop.org/show_bug.cgi?id=34164
     unset GREP_OPTIONS
 
-    if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
-      case "${XDG_CURRENT_DESKTOP}" in
+    IFS=:
+    for desktop in $XDG_CURRENT_DESKTOP ; do
+      unset IFS
+      case "$desktop" in
          # only recently added to menu-spec, pre-spec X- still in use
          Cinnamon|X-Cinnamon)
            DE=cinnamon;
@@ -313,7 +315,7 @@ detectDE()
            DE=enlightenment;
            ;;
          # GNOME, GNOME-Classic:GNOME, or GNOME-Flashback:GNOME
-         GNOME*)
+         GNOME)
            DE=gnome;
            ;;
          KDE)
@@ -338,7 +340,8 @@ detectDE()
            DE=generic
            ;;
       esac
-    fi
+      [ -n "$DE" ] && break
+    done
 
     # shellcheck disable=SC2153
     if [ -z "$DE" ]; then
