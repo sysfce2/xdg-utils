@@ -363,7 +363,7 @@ screensaver_kde3()
 
 xset_screensaver_timeout()
 {
-  xset q | sed '/^Screen Saver:/,/^[^ ]/ { s/.*timeout: *\([0-9]*\).*/\1/; t }; d'
+  xset q | sed '/^Screen Saver:/,/^[^ ]/ { s/.*timeout: *\([0-9]*\).*/\1/; t; }; d'
 }
 
 screensaver_xserver()
