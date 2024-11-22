@@ -83,7 +83,7 @@ and adding descriptions for new file types</refpurpose>
     <title>Commands</title>
     <variablelist>
       <varlistentry>
-	<term>query file</term>
+	<term>query filetype</term>
 	<listitem>
 	  <simpara>
 	    Returns the file type of <replaceable>FILE</replaceable> in the form of a MIME type.
@@ -96,8 +96,8 @@ and adding descriptions for new file types</refpurpose>
 		<listitem><para>Prefix known relative filepaths with a <quote>./</quote>. For example using <code>sed -E 's|^[^/]|./\0|'</code> as a preprocessor.</para></listitem>
       </itemizedlist>
 	  <simpara>
-            The <emphasis>query file</emphasis> option is for use inside a desktop session only.
-            It is not recommended to use xdg-mime query file as root.
+            The <emphasis>query filetype</emphasis> option is for use inside a desktop session only.
+            It is not recommended to use xdg-mime query filetype as root.
 	  </simpara>
 	</listitem>
       </varlistentry>
