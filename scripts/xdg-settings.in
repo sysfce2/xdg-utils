@@ -623,6 +623,11 @@ check_browser_generic()
     exit_success
 }
 
+normalize_binary()
+{
+	xdg_realpath "$(command -v "$1")"
+}
+
 # The BROWSER variable is outside the control of xdg-settings,
 # the best we can do is to do our part and explain
 # that additional configurtion could be neccessary
@@ -631,13 +636,15 @@ check_browser_generic()
 
 explain_browser_variable()
 {
-	echo "\$BROWSER is set and can't be changed with xdg-settings." >&2
-	echo "This means that some applications won't adopt the new browser setting." >&2
-	echo "The \$BROWSER envoirnment variable is likely set in your ~/.profile or ~/.bashrc which you have to edit manually. If you don't find it there consult the documentation/wiki of your desktop envoirnment or distribution." >&2
-	echo "Depending on the applications not setting \$BROWSER at all might also help." >&2
-    echo "" >&2
-    echo "Your \$BROWSER is currently set to: $BROWSER" >&2
-    echo "It should be set to: $1" >&2
+	if [ "$(normalize_binary "$1")" != "$(normalize_binary "$BROWSER")" ] ; then
+		echo "\$BROWSER is set and can't be changed with xdg-settings." >&2
+		echo "This means that some applications won't adopt the new browser setting." >&2
+		echo "The \$BROWSER envoirnment variable is likely set in your ~/.profile or ~/.bashrc which you have to edit manually. If you don't find it there consult the documentation/wiki of your desktop envoirnment or distribution." >&2
+		echo "Depending on the applications not setting \$BROWSER at all might also help." >&2
+	    echo "" >&2
+	    echo "Your \$BROWSER is currently set to: $BROWSER" >&2
+	    echo "It should be set to: $1" >&2
+    fi
 }
 
 set_browser_generic()
