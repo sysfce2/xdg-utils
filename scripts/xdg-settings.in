@@ -571,18 +571,20 @@ set_browser_xfce()
 # }}} xfce
 # {{{ generic
 
+# (Option<mimetype>)
 get_browser_generic()
 {
-    if [ -n "$BROWSER" ]; then
+
+    if get_browser_mime "${1:-x-scheme-handler/http}"; then
+        return 0
+    fi
+
+	if [ -n "$BROWSER" ]; then
         local browser=$(binary_to_desktop_file "${BROWSER%%:*}")
         if [ -n "$browser" ]; then
             basename "$browser"
             return 0
         fi
-    fi
-
-    if get_browser_mime x-scheme-handler/http; then
-        return 0
     fi
 
     # Debian and derivatives have x-www-browser
@@ -621,15 +623,32 @@ check_browser_generic()
     exit_success
 }
 
+# The BROWSER variable is outside the control of xdg-settings,
+# the best we can do is to do our part and explain
+# that additional configurtion could be neccessary
+#
+# Takes as argument the value browser is suggested to be set to.
+
+explain_browser_variable()
+{
+	echo "\$BROWSER is set and can't be changed with xdg-settings." >&2
+	echo "This means that some applications won't adopt the new browser setting." >&2
+	echo "The \$BROWSER envoirnment variable is likely set in your ~/.profile or ~/.bashrc which you have to edit manually. If you don't find it there consult the documentation/wiki of your desktop envoirnment or distribution." >&2
+	echo "Depending on the applications not setting \$BROWSER at all might also help." >&2
+    echo "" >&2
+    echo "Your \$BROWSER is currently set to: $BROWSER" >&2
+    echo "It should be set to: $1" >&2
+}
+
 set_browser_generic()
 {
-    if [ -n "$BROWSER" ]; then
-        exit_failure_operation_failed \
-            "\$BROWSER is set and can't be changed with xdg-settings"
-    fi
 
-    binary=$(desktop_file_to_binary "$1")
-    [ -n "$binary" ] || exit_failure_file_missing
+    binary="$(desktop_file_to_binary "$1")"
+    [ -n "$binary" ] || exit_failure_file_missing "Can't resolve this desktop file name to a command"
+
+    if [ -n "$BROWSER" ] && [ "$binary" != "$BROWSER" ]; then
+        explain_browser_variable "$binary"
+    fi
 
     set_browser_mime "$1" text/html || return
 
@@ -859,7 +878,7 @@ set_url_scheme_handler_xfce()
 get_url_scheme_handler_generic()
 {
     if [ -n "$BROWSER" ] && ([ "$1" = http ] || [ "$1" = https ]); then
-        get_browser_generic
+        get_browser_generic "x-scheme-handler/$1"
     else
         get_browser_mime "x-scheme-handler/$1"
     fi
@@ -874,7 +893,7 @@ check_url_scheme_handler_generic()
         exit_success
     fi
 
-    local browser=$(get_url_scheme_handler_generic "$scheme")
+    local browser="$(get_url_scheme_handler_generic "$scheme")"
     if [ "$browser" != "$desktop" ]; then
         echo no
         exit_success
@@ -887,14 +906,15 @@ set_url_scheme_handler_generic()
 {
     local scheme="$1" desktop="$2"
 
-    if [ -n "$BROWSER" ] && \
-           ([ "$scheme" = http ] || [ "$scheme" = https ]); then
-        exit_failure_operation_failed \
-            "\$BROWSER is set and can't be changed with xdg-settings"
+    # needed by explain_browser_variable as global
+    binary="$(desktop_file_to_binary "$desktop")"
+
+    if [ -n "$BROWSER" ] && ([ "$scheme" = http ] || [ "$scheme" = https ]); then
+	    explain_browser_variable "$binary"
     fi
 
-    if [ -z "$(desktop_file_to_binary "$desktop")" ]; then
-        exit_failure_file_missing
+    if [ -z "$binary" ]; then
+        exit_failure_file_missing "Can't resolve a command for the given desktop file name"
     fi
 
     set_browser_mime "$desktop" "x-scheme-handler/$scheme"
