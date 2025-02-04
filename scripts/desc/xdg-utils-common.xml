@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+    "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="xdg-utils-common">
+	<refentryinfo>
+		<title>xdg-utils Common Manual</title>
+		<copyright>
+			<year>2024-04-27</year>
+		</copyright>
+		<author>
+			<firstname>Slatian</firstname>
+			<address>
+				<email>baschdel+xdg-utils@disroot.org</email>
+			</address>
+		</author>
+		<releaseinfo>xdg-utils 1.2</releaseinfo>
+	</refentryinfo>
+
+	<refmeta>
+		<refentrytitle>xdg-utils-common</refentrytitle>
+		<manvolnum>7</manvolnum>
+	</refmeta>
+
+	<refnamediv>
+		<refname>xdg-utils-common</refname>
+		<refpurpose>Shared functionality of the xdg-utils scripts.</refpurpose>
+	</refnamediv>
+
+	<refsect1 id="description">
+		<title>Description</title>
+		<para>
+			The xdg-utils package is a set of scripts that provide basic desktop integration functions for any Free Desktop on Linux, the BSDs and even partially on MacOS and WSL.
+		</para>
+		<para>
+			Available xdg-utils are:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<simpara>
+				<citerefentry>
+					<refentrytitle>xdg-desktop-icon</refentrytitle>
+					<manvolnum>1</manvolnum>
+				</citerefentry>
+				</simpara>
+			</listitem>
+			<listitem>
+				<simpara>
+				<citerefentry>
+					<refentrytitle>xdg-desktop-menu</refentrytitle>
+					<manvolnum>1</manvolnum>
+				</citerefentry>
+				</simpara>
+			</listitem>
+			<listitem>
+				<simpara>
+				<citerefentry>
+					<refentrytitle>xdg-email</refentrytitle>
+					<manvolnum>1</manvolnum>
+				</citerefentry>
+				</simpara>
+			</listitem>
+			<listitem>
+				<simpara>
+				<citerefentry>
+					<refentrytitle>xdg-icon-resource</refentrytitle>
+					<manvolnum>1</manvolnum>
+				</citerefentry>
+				</simpara>
+			</listitem>
+			<listitem>
+				<simpara>
+				<citerefentry>
+					<refentrytitle>xdg-mime</refentrytitle>
+					<manvolnum>1</manvolnum>
+				</citerefentry>
+				</simpara>
+			</listitem>
+			<listitem>
+				<simpara>
+				<citerefentry>
+					<refentrytitle>xdg-open</refentrytitle>
+					<manvolnum>1</manvolnum>
+				</citerefentry>
+				</simpara>
+			</listitem>
+			<listitem>
+				<simpara>
+				<citerefentry>
+					<refentrytitle>xdg-realpath</refentrytitle>
+					<manvolnum>1</manvolnum>
+				</citerefentry>
+				</simpara>
+			</listitem>
+			<listitem>
+				<simpara>
+				<citerefentry>
+					<refentrytitle>xdg-screensaver</refentrytitle>
+					<manvolnum>1</manvolnum>
+				</citerefentry>
+				</simpara>
+			</listitem>
+			<listitem>
+				<simpara>
+				<citerefentry>
+					<refentrytitle>xdg-settings</refentrytitle>
+					<manvolnum>1</manvolnum>
+				</citerefentry>
+				</simpara>
+			</listitem>
+		</itemizedlist>
+		<para>
+			This manual describes mechanisms that are shared across all or multiple of the xdg-utils.
+		</para>
+	</refsect1>
+
+	<refsect1 id="exitcodes">
+		<title>Exit Codes</title>
+		<para>All xdg-utils share a common set of exit codes.</para>
+		<variablelist>
+			<varlistentry>
+				<term>0</term>
+				<listitem><simpara>Success.</simpara></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>1</term>
+				<listitem><simpara>CLI Syntax error, malformed or missing arguments/options.</simpara></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>2</term>
+				<listitem><simpara>A file specified on the CLI is missing.</simpara></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>3</term>
+				<listitem><simpara>An external tool needed to carry out the operation was not found.</simpara></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>4</term>
+				<listitem><simpara>An external tool used by the xdg-utils failed.</simpara></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>5</term>
+				<listitem><simpara>Permission problem: A file specified on the CLI couldn't be read.</simpara></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>6</term>
+				<listitem><simpara>Permission problem: A file specified on the CLI couldn't be written.</simpara></listitem>
+			</varlistentry>
+		</variablelist>
+		<para>For debugging have a look at the environment variables and the tool specific manual.</para>
+		<para>Exit codes not documented here or in a tool specific manual can be considered bugs.</para>
+	</refsect1>
+
+	<refsect1 id="mechanisms">
+		<title>Mechanisms</title>
+		<para>This chapter will explain different mechanisms under the hood of the xdg-utils.</para>
+		<refsect2 id="detectde">
+			<title>Desktop Environment Detection (detectDE)</title>
+			<para>The xdg-utils often try to delegate tasks to desktop specific tools to make things work, be consistent with the desktops native applications and a slight performance gain over the shell scripts.</para>
+			<para>To achieve this, they try to figure out which environment they are in by evaluating <envar>XDG_CURRENT_DESKTOP</envar>, the output of <code>uname</code> and the existence of specific files.</para>
+			<para>Currently recognized desktop environments are:</para>
+			<itemizedlist>
+				<listitem><para><code>cinnamon</code></para></listitem>
+				<listitem><para><code>dde</code> (Deepin)</para></listitem>
+				<listitem><para><code>enlightenment</code></para></listitem>
+				<listitem><para><code>gnome3</code></para></listitem>
+				<listitem><para><code>kde</code></para></listitem>
+				<listitem><para><code>lxde</code></para></listitem>
+				<listitem><para><code>lxqt</code></para></listitem>
+				<listitem><para><code>mate</code></para></listitem>
+				<listitem><para><code>xfce</code></para></listitem>
+			</itemizedlist>
+			<para>Recognized environments that aren't directly related to a desktop are:</para>
+			<itemizedlist>
+				<listitem><para><code>cygwin</code></para></listitem>
+				<listitem><para><code>wsl</code></para></listitem>
+				<listitem><para><code>darwin</code></para></listitem>
+				<listitem><para><code>flatpak</code></para></listitem>
+				<listitem><para><code>generic</code></para></listitem>
+			</itemizedlist>
+		</refsect2>
+		<refsect2 id="realpath">
+			<title>Realpath</title>
+			<para>Turning a relative path into an absolute one in a shellscript seems simple. Until one realizes that the safe way to call gnu realpath is not compatible with busybox realpath and sometimes <code>readlink -f</code> is the appropriate tool.</para>
+			<para>While this mechanism is used by most xdg-utils it is documented in <citerefentry><refentrytitle>xdg-realpath</refentrytitle><manvolnum>1</manvolnum></citerefentry>.</para> 
+		</refsect2>
+	</refsect1>
+
+	<refsect1 id="environment">
+		<title>Environment</title>
+		<para>These environment variables work across all xdg-utils and are mostly intended for debugging purposes. If you have to set these to work around a problem please file a bug report.</para>
+		<variablelist>
+			<varlistentry>
+				<term><envar>XDG_UTILS_DEBUG_LEVEL</envar></term>
+				<listitem>
+					<simpara>Integer in the range 1 to 4 to make the xdg-utils output an increasing amount of debug information.</simpara>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><envar>XDG_UTILS_INSTALL_MODE</envar></term>
+				<listitem>
+					<simpara>For tools that install something this can be set to either <code>user</code> or <code>system</code>.</simpara>
+					<para>See <citerefentry><refentrytitle>xdg-desktop-icon</refentrytitle><manvolnum>1</manvolnum></citerefentry>, <citerefentry><refentrytitle>xdg-icon-resource</refentrytitle><manvolnum>1</manvolnum></citerefentry> and <citerefentry><refentrytitle>xdg-desktop-menu</refentrytitle><manvolnum>1</manvolnum></citerefentry>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><envar>XDG_UTILS_REALPATH_BACKEND</envar></term>
+				<listitem>
+					<para>Which tool the xdg-utils will use to convert relative paths to absolute ones. Documented in <citerefentry><refentrytitle>xdg-realpath</refentrytitle><manvolnum>1</manvolnum></citerefentry>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><envar>XDG_CURRENT_DESKTOP</envar></term>
+				<listitem>
+					<para>Used for identifying desktop is currently in use. See the <ulink url="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys">Desktop Entry Specification</ulink> for more details.</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</refsect1>
+	<refsect1 id="reporting-issues">
+		<title>Reporting Issues</title>
+		<para>The xdg-utils combine multiple other tools that have had bug in the past, before reporting a bug please check if the bug is caused by a tool used in the xdg-utils. (When unsure please report it anyway) The tool specific manuals may contain hints on how to find out.</para>
+		<para>In case an issue specific to xdg-utils please report it to <uri>https://gitlab.freedesktop.org/xdg/xdg-utils/-/issues</uri> .</para>
+		<para>Please help the developers with information on how to reproduce the issue, it will increase the chance of a timely fix.</para>
+		<para>Have a patch? Great, but please don't forget to include information on what behavior you are trying to fix. The xdg-utils have a bad habit of disguising one problem as a different one.</para>
+	</refsect1>
+</refentry>
+

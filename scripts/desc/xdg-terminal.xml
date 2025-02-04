@@ -119,6 +119,15 @@
       </varlistentry>
     </variablelist>
   </refsect1>
+
+  <refsect1 id="seealso">
+    <title>See Also</title>
+    <para><citerefentry><refentrytitle>xdg-utils-common</refentrytitle>
+        <manvolnum>7</manvolnum>
+      </citerefentry>
+    </para>
+  </refsect1>
+  
   <refsect1 id="examples">
     <title>Examples</title>
     <para>

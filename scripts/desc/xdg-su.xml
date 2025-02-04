@@ -160,6 +160,9 @@
     <title>See Also</title>
     <para><citerefentry><refentrytitle>su</refentrytitle>
         <manvolnum>1</manvolnum>
+      </citerefentry>,
+      <citerefentry><refentrytitle>xdg-utils-common</refentrytitle>
+        <manvolnum>7</manvolnum>
       </citerefentry>
     </para>
   </refsect1>

@@ -257,6 +257,10 @@
         <refentrytitle>xdg-mime</refentrytitle>
         <manvolnum>1</manvolnum>
       </citerefentry>,
+      <citerefentry>
+        <refentrytitle>xdg-utils-common</refentrytitle>
+        <manvolnum>7</manvolnum>
+      </citerefentry>,
       <ulink url="http://www.freedesktop.org/wiki/Specifications/mime-apps-spec/">MIME applications associations specification</ulink>,
       <ulink url="https://tools.ietf.org/html/rfc6068">RFC 6068 - The 'mailto' URI Scheme</ulink>
     </para>

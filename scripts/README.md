@@ -49,3 +49,7 @@ Replace the lines …
 ]>
 ```
 
+For spellchecking one can use the following command:
+```sh
+LANG=en_US aspell --mode=sgml check desc/<file>.xml
+```

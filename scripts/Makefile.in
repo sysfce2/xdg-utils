@@ -27,7 +27,7 @@ SCRIPTS		= \
 #    xdg-file-dialog
 #    xdg-terminal
 
-MANPAGES=	$(SCRIPTS:%=man/%.1)
+MANPAGES=	$(SCRIPTS:%=man/%.1) man/xdg-utils-common.7
 WEBPAGES=	$(SCRIPTS:%=html/%.html)
 XMLFILES=	$(SCRIPTS:%=desc/%.xml)
 
@@ -101,6 +101,9 @@ xdg-file-dialog: xdg-file-dialog.in xdg-utils-common.in
 xdg-terminal: xdg-terminal.in xdg-utils-common.in
 
 man/%.1: desc/%.xml
+	(cd man;$(XMLTO) man ../$<)
+
+man/%.7: desc/%.xml
 	(cd man;$(XMLTO) man ../$<)
 
 html/index.html: $(XMLFILES)

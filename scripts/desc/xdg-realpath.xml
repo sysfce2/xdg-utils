@@ -182,6 +182,7 @@
     <title>See Also</title>
     <para><citerefentry><refentrytitle>realpath</refentrytitle><manvolnum>1</manvolnum></citerefentry>,
       <citerefentry><refentrytitle>readlink</refentrytitle><manvolnum>1</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>xdg-utils-common</refentrytitle><manvolnum>7</manvolnum></citerefentry>
     </para>
   </refsect1>
   <refsect1 id="examples">

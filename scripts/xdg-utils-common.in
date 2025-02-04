@@ -296,6 +296,7 @@ fi
 #--------------------------------------
 # Checks for known desktop environments
 # set variable DE to the desktop environments name, lowercase
+# Don't forget to update the manpage!
 
 detectDE()
 {
