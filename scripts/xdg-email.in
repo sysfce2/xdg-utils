@@ -99,7 +99,7 @@ open_kde()
                                         --group "PROFILE_$profile" \
                                         --key EmailClient \
                                   | cut -d ' ' -f 1)"
-            if [ -z "${client%%*.desktop}" ] && ! command -v "$client" >/dev/null 2>&1; then
+            if [ -n "$client" ] && [ -z "${client%%*.desktop}" ] && ! command -v "$client" >/dev/null 2>&1; then
                 client="$(desktop_file_to_binary "$client")"
             fi
 

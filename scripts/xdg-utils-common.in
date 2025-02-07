@@ -24,6 +24,10 @@ first_word()
 # map a binary to a .desktop file
 binary_to_desktop_file()
 {
+    if [ -z "$1" ] ; then
+        DEBUG 2 "binary_to_desktop_file argument is empty"
+        return
+    fi
     search="${XDG_DATA_HOME:-$HOME/.local/share}:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
     binary="$(command -v "$1")"
     binary="$(xdg_realpath "$binary")"
@@ -58,6 +62,10 @@ binary_to_desktop_file()
 desktop_file_to_binary()
 {
     DEBUG 1 "desktop_file_to_binary '$1'"
+    if [ -z "$1" ] ; then
+        DEBUG 2 "desktop_file_to_binary argument is empty"
+        return
+    fi
     search="${XDG_DATA_HOME:-$HOME/.local/share}:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
     desktop="$(basename "$1")"
     IFS=:
