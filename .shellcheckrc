@@ -3,6 +3,10 @@
 
 # Here to stay
 
+# pgrep would be a new non-POSIX dependency.
+# Grepping the output of ps is therefore okay
+disable=SC2009
+
 # checking success after running a command
 # is a common practice trhought the xdg-utils
 # and it works well enough to not change it.
