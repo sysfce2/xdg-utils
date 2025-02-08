@@ -217,6 +217,16 @@
 					<para>Used for identifying desktop is currently in use. See the <ulink url="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys">Desktop Entry Specification</ulink> for more details.</para>
 				</listitem>
 			</varlistentry>
+			<varlistentry>
+				<term><envar>XDG_UTILS_OVERRIDE_DE</envar></term>
+				<term><envar>XDG_UTILS_&lt;TOOL&gt;_OVERRIDE_DE</envar></term>
+				<listitem>
+					<para>Can be used in tesing and development context to override the output of the Desktop Environment Detection for all xdg-utils or for only a specific tool. See the Desktop Environment Detection section for a list of available values.</para>
+					<para>To target a specific tool replace <code>&lt;TOOL&gt;</code> with the upper-cased name of the tools command without the <code>xdg-</code> prefix. For <command>xdg-open</command> one would set the variable <envar>XDG_UTILS_OPEN_OVERRIDE_DE</envar>.</para>
+					<para>It is very easy to break the xdg-utils using this feature!</para>
+					<para>If you are using it outside of testing and development you are probably working around a bug. Please report this as an issue to the developers.</para>
+				</listitem>
+			</varlistentry>
 		</variablelist>
 	</refsect1>
 	<refsect1 id="reporting-issues">
