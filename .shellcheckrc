@@ -1,8 +1,14 @@
+# This file configures the shellcheck tool.
+# You can look up the codes on https://www.shellcheck.net/wiki/
+
+# Here to stay
 
 # checking success after running a command
 # is a common practice trhought the xdg-utils
 # and it works well enough to not change it.
 disable=SC2181
+
+# Should be re-enabled in the future
 
 # x prefixes aren't pretty anymore,
 # but they don't hurt either.
@@ -11,4 +17,5 @@ disable=SC2268
 # While local isn't exactly great
 # this warning produces unceccessary noise
 # distracting from more urgent issues
-disable=3043
+disable=SC3043
+
