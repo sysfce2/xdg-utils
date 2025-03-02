@@ -156,6 +156,12 @@ open_kde()
         6)
           kde-open "$1"
         ;;
+        *)
+	      DEBUG 0 "Detected an unknown KDE version using the KDE_SESSION_VERSION environment variable."
+	      DEBUG 1 "If you are on something newer than Plasma 6 you are likely running an outdated version of the xdg-utils, please check for updates."
+	      DEBUG 0 "Falling back to the generic opener."
+	      open_generic "$1"
+        ;;
       esac
     else
         kfmclient exec "$1"
