@@ -30,6 +30,7 @@ _USAGE
 #@xdg-utils-common@
 
 # This handles backslashes but not quote marks.
+# (text)
 last_word()
 {
     # Backslash handling is intended, not using `first` too
@@ -41,6 +42,7 @@ last_word()
 # Get the value of a key in a desktop file's Desktop Entry group.
 # Example: Use get_key foo.desktop Exec
 # to get the values of the Exec= key for the Desktop Entry group.
+# (desktop_file, key)
 get_key()
 {
     local file="${1}"
@@ -71,12 +73,14 @@ get_key()
     IFS="${IFS_}"
 }
 
+# (string_that_may_be_an_url)
 has_url_scheme()
 {
 	echo "$1" | LC_ALL=C grep -Eq '^[[:alpha:]][[:alpha:][:digit:]+\.\-]*:'
 }
 
 # Returns true if argument is a file:// URL or path
+# (url_or_path)
 is_file_url_or_path()
 {
     if echo "$1" | grep -q '^file://' || ! has_url_scheme "$1" ; then
@@ -86,6 +90,7 @@ is_file_url_or_path()
     fi
 }
 
+# ()
 get_hostname() {
     if [ -z "$HOSTNAME" ]; then
         if command -v hostname > /dev/null; then
@@ -98,6 +103,7 @@ get_hostname() {
 
 # If argument is a file URL, convert it to a (percent-decoded) path.
 # If not, leave it as it is.
+# (file_url)
 file_url_to_path()
 {
     local file="$1"
@@ -121,6 +127,7 @@ file_url_to_path()
     echo "$file"
 }
 
+# (url_or_path)
 open_cygwin()
 {
     cygstart "$1"
@@ -132,6 +139,7 @@ open_cygwin()
     fi
 }
 
+# (url_or_path)
 open_darwin()
 {
     open "$1"
@@ -143,6 +151,7 @@ open_darwin()
     fi
 }
 
+# (url_or_path)
 open_kde()
 {
     if [ -n "${KDE_SESSION_VERSION}" ]; then
@@ -175,6 +184,7 @@ open_kde()
     fi
 }
 
+# (url_or_path)
 open_deepin()
 {
     if dde-open -version >/dev/null 2>&1; then
@@ -190,6 +200,7 @@ open_deepin()
     fi
 }
 
+# (url_or_path)
 open_gnome3()
 {
     if gio help open 2>/dev/null 1>&2; then
@@ -207,6 +218,7 @@ open_gnome3()
     fi
 }
 
+# (url_or_path)
 open_gnome()
 {
     if gio help open 2>/dev/null 1>&2; then
@@ -226,6 +238,7 @@ open_gnome()
     fi
 }
 
+# (url_or_path)
 open_mate()
 {
     if gio help open 2>/dev/null 1>&2; then
@@ -245,6 +258,7 @@ open_mate()
     fi
 }
 
+# (url_or_path)
 open_xfce()
 {
     if xfce-open --help 2>/dev/null 1>&2; then
@@ -266,6 +280,7 @@ open_xfce()
     fi
 }
 
+# (url_or_path)
 open_enlightenment()
 {
     if enlightenment_open --help 2>/dev/null 1>&2; then
@@ -281,6 +296,7 @@ open_enlightenment()
     fi
 }
 
+# (url_or_path)
 open_flatpak()
 {
     if is_file_url_or_path "$1"; then
@@ -419,6 +435,8 @@ open_generic_xdg_mime()
     fi
 }
 
+# Open an url using the x-scheme-handler/<scheme> dummy mimetype
+# (url)
 open_generic_xdg_x_scheme_handler()
 {
     scheme="$(echo "$1" | LC_ALL=C sed -n 's/\(^[[:alpha:]][[:alnum:]+\.-]*\):.*$/\1/p')"
@@ -428,11 +446,15 @@ open_generic_xdg_x_scheme_handler()
     fi
 }
 
+# (args ...)
 has_single_argument()
 {
   test $# = 1
 }
 
+# Open an url or path using the BROWSER variable.
+# Exits on success retuerns otherwise.
+# (url_or_path)
 open_envvar()
 {
     local oldifs="$IFS"
@@ -463,6 +485,7 @@ open_envvar()
     done
 }
 
+# (url_or_path)
 open_wsl()
 {
     local win_path
@@ -482,6 +505,7 @@ open_wsl()
     fi
 }
 
+# (url_or_path)
 open_generic()
 {
     if is_file_url_or_path "$1"; then
@@ -533,6 +557,7 @@ open_generic()
     exit_failure_operation_impossible "no method available for opening '$1'"
 }
 
+# (url_or_path)
 open_lxde()
 {
 
@@ -558,6 +583,7 @@ open_lxde()
     fi
 }
 
+# (url_or_path)
 open_lxqt()
 {
     if qtxdg-mat open --help 2>/dev/null 1>&2; then

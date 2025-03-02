@@ -26,6 +26,9 @@ _USAGE
 
 #@xdg-utils-common@
 
+# Tests if the given text is a *.desktop file name.
+# Exits with an error message if not, returns if it is.
+# (passible_desktop_file_name)
 check_desktop_filename()
 {
     case "$1" in
@@ -52,6 +55,7 @@ check_desktop_filename()
 # MIME type. (We can't just delete the local version, since the user may have
 # made other changes to it as well. So, tweak the existing file.)
 # This function is hard-coded for text/html but it could be adapted if needed.
+# (desktop_file_name, mimetype)
 fix_local_desktop_file()
 {
     if test -z "$2" ; then
@@ -91,6 +95,7 @@ fix_local_desktop_file()
 # }}} utility functions
 # {{{ MIME utilities
 
+# ()
 xdg_mime_fixup()
 {
     # xdg-mime may use ktradertest, which will fork off a copy of kdeinit if
@@ -105,6 +110,8 @@ xdg_mime_fixup()
     fi
 }
 
+# Query the desktop file of the browser (or for a given mimetype)
+# (mimetype (or empty))
 get_browser_mime()
 {
     if test -z "$1" ; then
@@ -116,6 +123,8 @@ get_browser_mime()
     xdg-mime query default "$MIME"
 }
 
+# Set the handler for the browser or a given mimetype
+# (desktop_file_name, mimtype (or empty))
 set_browser_mime()
 {
     xdg_mime_fixup
@@ -141,6 +150,7 @@ set_browser_mime()
 # {{{ KDE utilities
 
 # Reads the KDE configuration setting, compensating for a bug in some versions of kreadconfig.
+# (configurtion_file, section, key)
 read_kde_config()
 {
     configfile="$1"
@@ -174,6 +184,7 @@ read_kde_config()
 
 # Resolves the KDE browser setting to a binary: if prefixed with !, simply removes it;
 # otherwise, uses desktop_file_to_binary to get the binary out of the desktop file.
+# ()
 resolve_kde_browser()
 {
     [ -z "$browser" ] && return
@@ -189,6 +200,7 @@ resolve_kde_browser()
 
 # Does the opposite of resolve_kde_browser: if prefixed with !, tries to find a desktop
 # file corresponding to the binary, otherwise just returns the desktop file name.
+# ()
 resolve_kde_browser_desktop()
 {
     [ -z "$browser" ] && return
@@ -203,6 +215,7 @@ resolve_kde_browser_desktop()
     esac
 }
 
+# ()
 read_kde_browser()
 {
     # since Plasma >= 5.19
@@ -215,6 +228,7 @@ read_kde_browser()
     echo $ret
 }
 
+# ()
 get_browser_kde()
 {
     browser="`read_kde_browser`"
@@ -226,6 +240,7 @@ get_browser_kde()
     fi
 }
 
+# (desktop_file_name)
 check_browser_kde()
 {
     check="`desktop_file_to_binary "$1"`"
@@ -259,6 +274,7 @@ check_browser_kde()
     exit_success
 }
 
+# (desktop_file_name)
 set_browser_kde()
 {
     # Set the default browser.
@@ -280,11 +296,13 @@ set_browser_kde()
 # }}} KDE
 # {{{ Deepin
 
+# ()
 read_deepin_browser()
 {
     dbus-send --print-reply=literal --dest=com.deepin.daemon.Mime /com/deepin/daemon/Mime com.deepin.daemon.Mime.GetDefaultApp string:"x-scheme-handler/http" | jq -r '.Id'
 }
 
+# ()
 get_browser_deepin()
 {
     browser="$(read_deepin_browser)"
@@ -296,6 +314,7 @@ get_browser_deepin()
     fi
 }
 
+# (desktop_file_name)
 check_browser_deepin()
 {
     if [ "$(read_deepin_browser)" = "$1" ]; then
@@ -305,6 +324,7 @@ check_browser_deepin()
     fi
 }
 
+# (desktop_file_name)
 set_browser_deepin()
 {
     xdg-mime default "$1" x-scheme-handler/http x-scheme-handler/ftp x-scheme-handler/https text/html text/xml text/xhtml_xml text/xhtml+xml
@@ -318,6 +338,7 @@ set_browser_deepin()
 # }}} Deepin
 # {{{ GNOME
 
+# ()
 get_browser_gnome()
 {
     binary="`gconftool-2 --get /desktop/gnome/applications/browser/exec | first_word`"
@@ -333,6 +354,7 @@ get_browser_gnome()
     fi
 }
 
+# (desktop_file_name)
 check_browser_gnome()
 {
     check="`desktop_file_to_binary "$1"`"
@@ -363,6 +385,7 @@ check_browser_gnome()
     exit_success
 }
 
+# (desktop_file_name)
 set_browser_gnome()
 {
     binary="`desktop_file_to_binary "$1"`"
@@ -388,11 +411,13 @@ set_browser_gnome()
 # }}} GNOME
 # {{{ GNOME 3.x
 
+# ()
 get_browser_gnome3()
 {
     get_browser_mime "x-scheme-handler/http"
 }
 
+# (desktop_file_name)
 check_browser_gnome3()
 {
     desktop="$1"
@@ -413,6 +438,7 @@ check_browser_gnome3()
     exit_success
 }
 
+# (desktop_file_name)
 set_browser_gnome3()
 {
     binary="`desktop_file_to_binary "$1"`"
@@ -427,6 +453,7 @@ set_browser_gnome3()
 # }}} GNOME 3.x
 # {{{ LXQt
 
+# ()
 get_browser_lxqt()
 {
     if qtxdg-mat def-web-browser --help 2> /dev/null 1>&2; then
@@ -436,6 +463,7 @@ get_browser_lxqt()
     fi
 }
 
+# (desktop_file_name)
 check_browser_lxqt()
 {
     desktop="$1"
@@ -456,6 +484,7 @@ check_browser_lxqt()
     fi
 }
 
+# (desktop_file_name)
 set_browser_lxqt()
 {
     binary="`desktop_file_to_binary "$1"`"
@@ -470,6 +499,7 @@ set_browser_lxqt()
 # }}} LXQt
 # {{{ xfce
 
+# ()
 get_browser_xfce()
 {
     search="${XDG_CONFIG_HOME:-$HOME/.config}:${XDG_CONFIG_DIRS:-/etc/xdg}"
@@ -487,6 +517,7 @@ get_browser_xfce()
     exit_failure_operation_failed
 }
 
+# (desktop_file_name)
 check_browser_xfce()
 {
     browser="`get_browser_xfce`"
@@ -498,6 +529,7 @@ check_browser_xfce()
     exit_success
 }
 
+# (desktop_file_name)
 check_xfce_desktop_file()
 {
     # Annoyingly, xfce wants its .desktop files in a separate directory instead
@@ -538,6 +570,7 @@ check_xfce_desktop_file()
     return 1
 }
 
+# (desktop_file_name)
 set_browser_xfce()
 {
     check_xfce_desktop_file "$1" || exit_failure_operation_failed
@@ -571,7 +604,7 @@ set_browser_xfce()
 # }}} xfce
 # {{{ generic
 
-# (Option<mimetype>)
+# (mimetype (or empty))
 get_browser_generic()
 {
 
@@ -597,6 +630,7 @@ get_browser_generic()
     return 4
 }
 
+# (desktop_file_name)
 check_browser_generic()
 {
     local desktop="$1"
@@ -623,6 +657,7 @@ check_browser_generic()
     exit_success
 }
 
+# (command_or_path_to_binary)
 normalize_binary()
 {
 	xdg_realpath "$(command -v "$1")"
@@ -633,7 +668,7 @@ normalize_binary()
 # that additional configurtion could be neccessary
 #
 # Takes as argument the value browser is suggested to be set to.
-
+# (expected_content_of_browser_variable)
 explain_browser_variable()
 {
 	if [ "$(normalize_binary "$1")" != "$(normalize_binary "$BROWSER")" ] ; then
@@ -647,6 +682,7 @@ explain_browser_variable()
     fi
 }
 
+# (desktop_file_name)
 set_browser_generic()
 {
 
@@ -683,6 +719,7 @@ exit_unimplemented_default_handler()
 # default mail handler for the mailto scheme, otherwise we will use the mime
 # type x-scheme-handler/scheme.
 
+# (scheme)
 get_url_scheme_handler_kde()
 {
     if [ "$1" = "mailto" ]; then
@@ -698,6 +735,7 @@ get_url_scheme_handler_kde()
     fi
 }
 
+# (scheme, desktop_file_name)
 check_url_scheme_handler_kde()
 {
     check="`desktop_file_to_binary "$2"`"
@@ -729,6 +767,7 @@ check_url_scheme_handler_kde()
     exit_success
 }
 
+# (scheme, desktop_file_name)
 set_url_scheme_handler_kde()
 {
     set_browser_mime "$2" "x-scheme-handler/$1" || return
@@ -747,6 +786,7 @@ set_url_scheme_handler_kde()
 # }}} KDE
 # {{{ GNOME
 
+# (scheme)
 get_url_scheme_handler_gnome()
 {
     binary="`gconftool-2 --get /desktop/gnome/url-handlers/$1/command | first_word`"
@@ -759,6 +799,7 @@ get_url_scheme_handler_gnome()
     fi
 }
 
+# (scheme, desktop_file_name)
 check_url_scheme_handler_gnome()
 {
     check="`desktop_file_to_binary "$2"`"
@@ -775,6 +816,7 @@ check_url_scheme_handler_gnome()
     exit_success
 }
 
+# (scheme, desktop_file_name)
 set_url_scheme_handler_gnome()
 {
     binary="`desktop_file_to_binary "$2"`"
@@ -788,6 +830,7 @@ set_url_scheme_handler_gnome()
 # }}} GNOME
 # {{{ LXQt
 
+# (scheme)
 get_url_scheme_handler_lxqt()
 {
     if qtxdg-mat defapp --help 2> /dev/null 1>&2; then
@@ -797,6 +840,7 @@ get_url_scheme_handler_lxqt()
     fi
 }
 
+# (scheme, desktop_file_name)
 check_url_scheme_handler_lxqt()
 {
     desktop="$2"
@@ -817,6 +861,7 @@ check_url_scheme_handler_lxqt()
     fi
 }
 
+# (scheme, desktop_file_name)
 set_url_scheme_handler_lxqt()
 {
     binary="`desktop_file_to_binary "$2"`"
@@ -830,11 +875,13 @@ set_url_scheme_handler_lxqt()
 # }}} LXQt
 # {{{ GNOME 3.x
 
+# (scheme)
 get_url_scheme_handler_gnome3()
 {
     get_browser_mime "x-scheme-handler/$1"
 }
 
+# (scheme, desktop_file_name)
 check_url_scheme_handler_gnome3()
 {
     desktop="$2"
@@ -852,6 +899,7 @@ check_url_scheme_handler_gnome3()
     exit_success
 }
 
+# (scheme, desktop_file_name)
 set_url_scheme_handler_gnome3()
 {
     binary="`desktop_file_to_binary "$2"`"
@@ -864,16 +912,19 @@ set_url_scheme_handler_gnome3()
 # }}} GNOME 3.x
 # {{{ xfce
 
+# (scheme)
 get_url_scheme_handler_xfce()
 {
     exit_unimplemented_default_handler "$1"
 }
 
+# (scheme, desktop_file_name)
 check_url_scheme_handler_xfce()
 {
     exit_unimplemented_default_handler "$1"
 }
 
+# (scheme, desktop_file_name)
 set_url_scheme_handler_xfce()
 {
     exit_unimplemented_default_handler "$1"
@@ -882,6 +933,7 @@ set_url_scheme_handler_xfce()
 # }}} xfce
 # {{{ generic
 
+# (scheme)
 get_url_scheme_handler_generic()
 {
     if [ -n "$BROWSER" ] && ([ "$1" = http ] || [ "$1" = https ]); then
@@ -891,6 +943,7 @@ get_url_scheme_handler_generic()
     fi
 }
 
+# (scheme, desktop_file_name)
 check_url_scheme_handler_generic()
 {
     local scheme="$1" desktop="$2"
@@ -909,6 +962,7 @@ check_url_scheme_handler_generic()
     exit_success
 }
 
+# (scheme, desktop_file_name)
 set_url_scheme_handler_generic()
 {
     local scheme="$1" desktop="$2"
@@ -930,6 +984,11 @@ set_url_scheme_handler_generic()
 # }}} generic
 # }}} default protocol handler
 
+# Dispatches the given cli command to the correct handler
+# Expects global variables:
+# * op: "get", "check" or "set"
+# * parm: "default-web-browser" or "default-url-scheme-handler"
+# (handler_name, args ...)
 dispatch_specific()
 {
     local handler=$1; shift

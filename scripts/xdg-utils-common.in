@@ -4,6 +4,7 @@
 
 #shellcheck shell=sh
 
+# (level, echo_args ...)
 DEBUG()
 {
   [ -z "${XDG_UTILS_DEBUG_LEVEL}" ] && return 0;
@@ -13,6 +14,7 @@ DEBUG()
 }
 
 # This handles backslashes but not quote marks.
+# (text)
 first_word()
 {
     # shellcheck disable=SC2162 # No -r is intended here
@@ -22,6 +24,7 @@ first_word()
 
 #-------------------------------------------------------------
 # map a binary to a .desktop file
+# (command_or_path_to_binary)
 binary_to_desktop_file()
 {
     if [ -z "$1" ] ; then
@@ -58,7 +61,7 @@ binary_to_desktop_file()
 # map a .desktop file name to its Exec binary
 # Returns the realpath resolved path to the binary or noting.
 
-# desktop_file_to_binary <desktop-file-name>
+# (desktop_file_name)
 desktop_file_to_binary()
 {
     DEBUG 1 "desktop_file_to_binary '$1'"
@@ -122,6 +125,7 @@ desktop_file_to_binary()
 #-------------------------------------------------------------
 # Exit script on successfully completing the desired operation
 
+# (message (optional))
 # shellcheck disable=SC2120 # It is okay to call this without arguments
 exit_success()
 {
@@ -139,6 +143,7 @@ exit_success()
 # or missing required option.
 # prints usage information
 
+# (message (optional))
 exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
@@ -155,6 +160,7 @@ exit_failure_syntax()
 #-------------------------------------------------------------
 # Exit script on missing file specified on command line
 
+# (message (optional))
 exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
@@ -167,6 +173,7 @@ exit_failure_file_missing()
 #-------------------------------------------------------------
 # Exit script on failure to locate necessary tool applications
 
+# (message (optional))
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
@@ -179,6 +186,7 @@ exit_failure_operation_impossible()
 #-------------------------------------------------------------
 # Exit script on failure returned by a tool application
 
+# (message (optional))
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
@@ -191,6 +199,7 @@ exit_failure_operation_failed()
 #------------------------------------------------------------
 # Exit script on insufficient permission to read a specified file
 
+# (message (optional))
 exit_failure_file_permission_read()
 {
     if [ $# -gt 0 ]; then
@@ -203,6 +212,7 @@ exit_failure_file_permission_read()
 #------------------------------------------------------------
 # Exit script on insufficient permission to write a specified file
 
+# (message (optional))
 exit_failure_file_permission_write()
 {
     if [ $# -gt 0 ]; then
@@ -212,6 +222,7 @@ exit_failure_file_permission_write()
     exit 6
 }
 
+# (path)
 check_input_file()
 {
     if [ ! -e "$1" ]; then
@@ -222,6 +233,7 @@ check_input_file()
     fi
 }
 
+# (label_for_error_message, path_to_check)
 check_vendor_prefix()
 {
     file_label="$2"
@@ -240,6 +252,7 @@ check_vendor_prefix()
     exit 1
 }
 
+# (path)
 check_output_file()
 {
     # if the file exists, check if it is writeable
@@ -259,6 +272,7 @@ check_output_file()
 #----------------------------------------
 # Checks for shared commands, e.g. --help
 
+# (args ...)
 check_common_commands()
 {
     while [ $# -gt 0 ] ; do
@@ -305,7 +319,8 @@ fi
 # Checks for known desktop environments
 # set variable DE to the desktop environments name, lowercase
 # Don't forget to update the manpage!
-
+#
+# ()
 detectDE()
 {
     # see https://bugs.freedesktop.org/show_bug.cgi?id=34164
@@ -426,7 +441,8 @@ detectDE()
 # kfmclient exec/openURL can give bogus exit value in KDE <= 3.5.4
 # It also always returns 1 in KDE 3.4 and earlier
 # Simply return 0 in such case
-
+# 
+# (exit_code)
 kfmclient_fix_exit_code()
 {
     version="$(LC_ALL=C.UTF-8 kde-config --version 2>/dev/null | grep '^KDE')"
@@ -441,7 +457,8 @@ kfmclient_fix_exit_code()
 
 #----------------------------------------------------------------------------
 # Returns true if there is a graphical display attached.
-
+#
+# ()
 has_display()
 {
     if [ -n "$DISPLAY" ] || [ -n "$WAYLAND_DISPLAY" ]; then
@@ -454,7 +471,8 @@ has_display()
 #----------------------------------------------------------------------------
 # Prefixes a path with a "./" if it starts with a "-".
 # This is useful for programs to not confuse paths with options.
-
+#
+# ()
 unoption_path()
 {
 	case "$1" in
@@ -468,7 +486,8 @@ unoption_path()
 #----------------------------------------------------------------------------
 # Performs a symlink and relative path resolving for a single argument.
 # This will always fail if the given file does not exist!
-
+#
+# (path)
 xdg_realpath()
 {
 	# allow caching and external configuration
@@ -512,8 +531,8 @@ xdg_realpath()
 # Returns either the path of the resolved binary or nothing
 # because command -v does not always return the path of a command
 # (builtins, aliases, functions, etc.)
-
-# xdg_which <command>
+#
+# (command)
 xdg_which()
 {
 	case "$1" in
@@ -544,8 +563,8 @@ xdg_which()
 #----------------------------------------------------------------------------
 # Helper function that returns the value for `$XDG_CONFIG_HOME`,
 # independent of it being explicitly set or simply a fallback.
-
-# get_xdg_config_home
+#
+# ()
 get_xdg_config_home()
 {
 	# Only use XDG_CONFIG_HOME if it is an absolute path

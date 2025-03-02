@@ -30,6 +30,7 @@ _USAGE
 
 #@xdg-utils-common@
 
+# ()
 update_kde_cache()
 {
 	DEBUG 1 "Running kbuildsycoca"
@@ -40,6 +41,7 @@ update_kde_cache()
 	fi
 }
 
+# ()
 update_mime_database()
 {
    if [ "$mode" = user ] && has_display; then
@@ -60,6 +62,9 @@ update_mime_database()
    done
 }
 
+# info_* functions that print the mimetype of a given file
+
+# (file_path)
 info_kde()
 {
     if [ -n "${KDE_SESSION_VERSION}" ]; then
@@ -94,6 +99,7 @@ info_kde()
     fi
 }
 
+# (file_path)
 info_gnome()
 {
     if gio help info 2>/dev/null 1>&2; then
@@ -116,6 +122,7 @@ info_gnome()
     fi
 }
 
+# (file_path)
 info_lxqt()
 {
     if qtxdg-mat mimetype --help 2>/dev/null 1>&2; then
@@ -131,6 +138,7 @@ info_lxqt()
     fi
 }
 
+# (file_path)
 info_generic()
 {
     if mimetype --version >/dev/null 2>&1; then
@@ -148,6 +156,9 @@ info_generic()
     fi
 }
 
+# make_default_* functions that set a given desktop file as the handler for a given mimetype
+
+# (desktop_file_name, mimetype)
 make_default_kde()
 {
     # $1 is vendor-name.desktop
@@ -277,6 +288,7 @@ make_default_kde()
     fi
 }
 
+# (desktop_file_name, mimetype)
 make_default_lxqt()
 {
     # $1 is vendor-name.desktop
@@ -294,6 +306,7 @@ make_default_lxqt()
     fi
 }
 
+# (desktop_file_name, mimetype)
 make_default_generic()
 {
     # $1 is vendor-name.desktop
@@ -358,6 +371,9 @@ make_default_generic()
 ' "$out_file" > "$out_file.new" && mv "$out_file.new" "$out_file"
 }
 
+# Search for desktop files that mention (support?) a given mimetype.
+# Prints a newline seperated list of matching files.
+# (mimtype, in_directory)
 search_desktop_file()
 {
     local MIME dir
@@ -371,6 +387,9 @@ search_desktop_file()
     done
 }
 
+## defapp_* functions that print the matching desktop file name for a given mimetype.
+
+# (mimetype)
 defapp_fallback()
 {
     MIME="$1"
@@ -405,6 +424,11 @@ defapp_fallback()
     fi
 }
 
+# Check for the given mimetype in the appropriate mimeapps.list files
+# in the given directory.
+# Prints the name of the desktop file that should handle the given mimetype.
+# Exits on success, returns otherwise.
+# (mimetype, in_directory)
 check_mimeapps_list()
 {
 	local mimetype dir desktop oldifs
@@ -458,6 +482,7 @@ check_mimeapps_list()
     done
 }
 
+# (mimetype)
 defapp_generic()
 {
     MIME="$1"
@@ -505,6 +530,7 @@ defapp_generic()
     exit_success
 }
 
+# (mimetype)
 defapp_kde()
 {
     MIME="$1"
@@ -536,6 +562,7 @@ defapp_kde()
     fi
 }
 
+# (mimetype)
 defapp_lxqt()
 {
     if qtxdg-mat defapp --help 2>/dev/null 1>&2; then
