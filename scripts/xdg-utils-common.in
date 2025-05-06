@@ -358,8 +358,6 @@ detectDE()
       elif [ -n "$GNOME_DESKTOP_SESSION_ID" ]; then DE=gnome;
       elif [ -n "$MATE_DESKTOP_SESSION_ID" ]; then DE=mate;
       elif dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1 ; then DE=gnome;
-      elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
-      elif xprop -root 2> /dev/null | grep -i '^xfce_desktop_window' >/dev/null 2>&1; then DE=xfce
       elif echo "$DESKTOP" | grep -q '^Enlightenment'; then DE=enlightenment;
       elif [ -n "$LXQT_SESSION_CONFIG" ]; then DE=lxqt;
       fi
