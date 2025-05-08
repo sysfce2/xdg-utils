@@ -247,7 +247,9 @@ open_mate()
 
 open_xfce()
 {
-    if exo-open --help 2>/dev/null 1>&2; then
+    if xfce-open --help 2>/dev/null 1>&2; then
+        xfce-open "$1"
+    elif exo-open --help 2>/dev/null 1>&2; then
         exo-open "$1"
     elif gio help open 2>/dev/null 1>&2; then
         gio open "$1"
