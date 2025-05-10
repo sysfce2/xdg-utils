@@ -44,11 +44,9 @@ DBus Services:
 
 ### X11
 
-* `xprop` (desktop detection)
+* `xprop` (xdg-screensaver)
 * `xscreensaver-command` (xdg-screensaver)
 * `xset` (xdg-screensaver)
-
-Note: These seem to be required for xdg-screensaver.
 
 ### Windows WSL
 * `explorer.exe` (Detecting WSL, xdg-open)
