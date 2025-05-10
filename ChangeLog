@@ -1,3 +1,25 @@
+=== xdg-utils NOT YET RELEASED ===
+2025-05-10 Slatian
+  * xdg-mail: No longer handle `attach` in mailto URLs (!89, #177, CVE-2020-27748)
+  * all: shellcheck (!132)
+  * xdg-open: Unknown KDE versions now use the generic opener instead of failing
+    (!134, #273)
+  * all: Add `XDG_UTILS_OVERRIDE_DE` and tool specific overrides (!113, #240)
+  * xdg-screensaver: Allow using `org.freedesktop.ScreenSaver` independent of desktop
+    (!133, #261)
+
+2025-05-10 Reuben Thomas
+  * all: Remove no longer needed xprop fingerprinting that impacted performance
+    (!140, #275)
+  * xdg-screensaver: Fix suspending using window without a `WM_NAME` property (!138)
+  * xdg-screensaver: Fix call to `org.freedesktop.ScreenSaver.Inhibit` (!137)
+
+2025-05-10 eylles and Teemu Ikonen
+  * xdg-screensaver: Add support for xss-lock (!118, #139)
+
+2025-05-10 Michał Górny
+  * xdg-open: Use new xfce-open preferred to exo-open of available (!141)
+
 === xdg-utils 1.2.1 ===
 2024-02-06 Slatian
   * Proper quoting of `_MANUALPAGE` and `_USAGE` sections. (#243)
