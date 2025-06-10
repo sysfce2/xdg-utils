@@ -92,11 +92,8 @@ echo "Running Shellcheck ..."
 #  This one should be updated once shellcheck gets a
 #  "function never gets called" check with its own id.
 
-shellcheck --color=always "./$SCRIPT.in" \
-	-i SC2317
 
 shellcheck --color=always "./$SCRIPT" \
-	-e SC2317 \
 	"$@" |
 	awk \
 	-v"source_name=$SCRIPT.in" \
