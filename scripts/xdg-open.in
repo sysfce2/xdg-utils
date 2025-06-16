@@ -694,7 +694,6 @@ while [ $# -gt 0 ]; do
 
     case "$parm" in
         --nowait)
-            shift
             NOWAIT=1
             ;;
 
