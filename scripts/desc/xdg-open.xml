@@ -39,6 +39,9 @@
       <group choice="opt">
         <arg choice="plain"><option>--nowait</option></arg>
       </group>
+      <group choice="opt">
+        <arg choice="plain"><option>--</option></arg>
+      </group>
       <group choice="req" rep="repeat">
         <arg choice="plain"><option><replaceable>file</replaceable></option></arg>
         <arg choice="plain"><option><replaceable>URL</replaceable></option></arg>
@@ -67,7 +70,7 @@
 	  As xdg-open can not handle arguments that begin with a <quote>-</quote> it is recommended to pass filepaths in one of the following ways:
     </para>
 	  <itemizedlist>
-		  <listitem><para>Pass absolute paths, i.e. by using <command>realpath</command> as a preprocessor.</para></listitem>
+		  <listitem><para>Pass absolute paths, i.e. by using <command>xdg-realpath</command> as a preprocessor.</para></listitem>
 		  <listitem><para>Prefix known relative filepaths with a <quote>./</quote>. For example using <code>sed -E 's|^[^/]|./\0|'</code>.</para></listitem>
 		  <listitem><para>Pass a file URL.</para></listitem>
 	  </itemizedlist>
@@ -76,6 +79,22 @@
     <title>Options</title>
     <variablelist>
       <varlistentry>
+	<term><option>--</option></term>
+	<listitem>
+	  <simpara>
+	    Indicate that whatever follows is a filename or URL, not an option.
+	  </simpara>
+	  <simpara>
+		This option is new and incompatible with older releases!
+		Consider escaping or using realpath instead.
+	  </simpara>
+	  <simpara>
+		 Internally this will the prefix escaping strategy for filenames that begin with hyphens outlined above.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
 	<term><option>--nowait</option></term>
 	<listitem>
 	  <simpara>
@@ -83,6 +102,7 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
+
 
       <varlistentry>
 	<term><option>--help</option></term>
@@ -198,6 +218,9 @@
         <manvolnum>1</manvolnum>
       </citerefentry>,
       <citerefentry><refentrytitle>xdg-settings</refentrytitle>
+        <manvolnum>1</manvolnum>
+      </citerefentry>,
+      <citerefentry><refentrytitle>xdg-realpath</refentrytitle>
         <manvolnum>1</manvolnum>
       </citerefentry>,
       <citerefentry><refentrytitle>xdg-utils-common</refentrytitle>

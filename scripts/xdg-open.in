@@ -27,6 +27,8 @@ cat << '_USAGE'
 _USAGE
 }
 
+XDG_UTILS_ENABLE_DOUBLE_HYPEN="y"
+
 #@xdg-utils-common@
 
 # (string_that_may_be_an_url)
@@ -940,6 +942,21 @@ esac
 # Handle the URL arguments and script-specific options.
 NOWAIT=0
 err=0
+
+# (arg, remaining_args)
+handle_positional_arg() {
+	echo "remaining: $2"
+	if [ "$2" -gt 0 ] || [ "$NOWAIT" = 1 ]; then
+		(open_one_argument "$1" &)
+	else
+		(open_one_argument "$1")
+	fi
+	this_err=$?
+	if [ $err -eq 0 ]; then
+		err=$this_err
+	fi
+}
+
 while [ $# -gt 0 ]; do
     parm="$1"
     shift
@@ -949,21 +966,25 @@ while [ $# -gt 0 ]; do
             NOWAIT=1
             ;;
 
+		--)
+			break
+			;;
+
         -*)
             exit_failure_syntax "unexpected option '$parm'"
             ;;
 
         *)
-            if [ $# -gt 0 ] || [ $NOWAIT = 1 ]; then
-                (open_one_argument "$parm" &)
-            else
-                (open_one_argument "$parm")
-            fi
-            this_err=$?
-            if [ $err -eq 0 ]; then
-                err=$this_err
-            fi
+	        handle_positional_arg "$parm" "$#"
             ;;
     esac
 done
+
+# handle positional arguments after a --
+while [ $# -gt 0 ]; do
+	parm="$1"
+	shift
+	handle_positional_arg "$parm" "$#"
+done
+
 exit $err
