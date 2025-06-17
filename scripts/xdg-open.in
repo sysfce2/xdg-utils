@@ -513,7 +513,7 @@ END {
 	# Field code expansion
 	expanded_args[0] = "";
 	eargc = 0;
-	already_found_field_code = 0;
+	found_file_field_codes = 0;
 	for (i=0; args[i]; i++) {
 		arg = args[i];
 		debug(2, "Running field code expansion on arg: " arg);
@@ -522,14 +522,14 @@ END {
 				expanded_args[eargc] = files[j];
 				eargc = eargc + 1;
 			}
-			already_found_field_code = 1;
+			found_file_field_codes++;
 			continue
 		} else if (arg == "%U") {
 			for (j=0; j<length(urls); j++) {
 				expanded_args[eargc] = urls[j];
 				eargc = eargc + 1;
 			}
-			already_found_field_code = 1;
+			found_file_field_codes++;
 			continue
 		} else if (arg == "%i") {
 			if (icon_value) {
@@ -555,9 +555,11 @@ END {
 			} else if (char == "f") {
 				# Take just the first arg for the prototype
 				expanded_arg = expanded_arg files[0];
+				found_file_field_codes++;
 			} else if (char == "u") {
 				# Take just the first arg for the prototype
 				expanded_arg = expanded_arg uris[0];
+				found_file_field_codes++;
 			} else if (char == "c") {
 				if (name_value) {
 					expanded_arg = expanded_arg name_value
@@ -576,10 +578,24 @@ END {
 				exit 1
 			}
 		}
+		if (found_file_field_codes > 1) {
+			print "xdg-open: More than one file field codes (%f, %F, %u, %U) in Exec key, this .desktop file is invalid!" >> "/dev/stderr";
+			exit 1
+		}
 		expanded_args[eargc] = expanded_arg;
 		eargc = eargc + 1;
 	}
-	
+
+	if (found_file_field_codes == 0) {
+		debug(1, "Didn't find a file field code (%f, %F, %u, %U), appending filepath/url as last argument");
+		if (files[0]) {
+			expanded_args[eargc] = files[0];
+		} else {
+			expanded_args[eargc] = uris[0];
+		}
+		eargc = eargc + 1;
+	}
+
 	for (i=0; expanded_args[i]; i++) {
 		debug(1, "Arg: " expanded_args[i]);
 		printf("%s\0", expanded_args[i]);
