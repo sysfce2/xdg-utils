@@ -297,16 +297,30 @@ BEGIN {
 		split(uri_arg, split_uri_arg, " ")
 	}
 
+	has_uri = 0;
 	filec = 0;
 	for (i=1; split_uri_arg[i]; i++) {
+		has_uri = 1;
 		uri = split_uri_arg[i]
 		uris[i-1] = uri;
 		debug(2, "URI: " uri)
-		file = decode_local_file_uri(uri)
-		if (file) {
-			debug(2, "File: " file)
-			files[filec] = file;
-			filec = filec + 1;
+		if (file_arg != "") {
+			file = decode_local_file_uri(uri)
+			if (file) {
+				debug(2, "File: " file)
+				files[filec] = file;
+				filec = filec + 1;
+			}
+		}
+	}
+
+	if (file_arg != "") {
+		debug(2, "File: " file_arg)
+		files[filec] = file_arg;
+		filec = filec + 1;
+		if (!has_uri) {
+			debug(2, "URI (falling back to file path): " file_arg)
+			uris[0] = file_arg
 		}
 	}
 	
@@ -525,8 +539,8 @@ END {
 			found_file_field_codes++;
 			continue
 		} else if (arg == "%U") {
-			for (j=0; j<length(urls); j++) {
-				expanded_args[eargc] = urls[j];
+			for (j=0; j<length(uris); j++) {
+				expanded_args[eargc] = uris[j];
 				eargc = eargc + 1;
 			}
 			found_file_field_codes++;
@@ -605,13 +619,13 @@ END {
 AWKEOF
 )"
 
-# (desktop_file, url)
+# (desktop_file, file, uri (optional))
 open_with_desktop_file()
 {
-	awk -v"hostname=$(get_hostname)" -v"uri_arg=$2" "$awk_script_open_with_desktop_file" < "$1" | xargs -0 -x sh -c 'exec "$@"' -
+	awk -v"hostname=$(get_hostname)" -v"file_arg=$2" -v"uri_arg=$3" "$awk_script_open_with_desktop_file" < "$1" | xargs -0 -x sh -c 'exec "$@"' -
 }
 
-#(application, directory, target file, target_url)
+#(application, directory, target_file, target_url (optional))
 search_desktop_file()
 {
     local default="$1"
@@ -628,7 +642,7 @@ search_desktop_file()
     fi
 
     if [ -r "$file" ] ; then
-		open_with_desktop_file "$file" "$target_uri"
+		open_with_desktop_file "$file" "$target" "$target_uri"
 		exit_success
     fi
 
@@ -743,7 +757,11 @@ open_generic()
             filetype="$(xdg-mime query filetype "$file" | sed "s/;.*//")"
             # passing a path a url is okay too,
             # see desktop file specification for '%u'
-            open_generic_xdg_mime "$file" "$filetype" "$1"
+			if has_url_scheme "$1" ; then
+				open_generic_xdg_mime "$file" "$filetype" "$1"
+			else
+				open_generic_xdg_mime "$file" "$filetype"
+			fi
         fi
 
         if command -v run-mailcap >/dev/null; then
