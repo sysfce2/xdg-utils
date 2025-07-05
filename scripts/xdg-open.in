@@ -474,7 +474,7 @@ function debug(level, text) {
 	if (!debug_level) {
 		return;
 	}
-	if (level >= debug_level) {
+	if (level <= debug_level) {
 		print "DEBUG: " text >> "/dev/stderr";
 	}
 }
