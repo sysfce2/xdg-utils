@@ -493,6 +493,12 @@ function debug(level, text) {
 	}
 }
 
+function error(text) {
+	printf("err\0");
+	print "xdg-open ERROR: " text >> "/dev/stderr";
+	exit 4
+}
+
 in_main_section && match($0, /^[^#=\[]+\[?[^=\]]*\]?=/) {
 	index_of_eq = index($0, "=");
 	index_of_bracket_open = index($0, "[");
@@ -585,16 +591,13 @@ END {
 			} else if (char == "d" || char == "D" || char == "n" || char == "N") {
 				# Deprecated, silently remove
 			} else if (char == "i" || char == "U" || char == "F") {
-				print "xdg-open: Field code %" char "must be stand alone as it expands into multiple arguments!" >> "/dev/stderr";
-				exit
+				error("xdg-open: Field code %" char "must be stand alone as it expands into multiple arguments!")
 			} else {
-				print "xdg-open: Unknown field code: %" char "in Exec key!" >> "/dev/stderr";
-				exit 1
+				error("xdg-open: Unknown field code: %" char " in Exec key!");
 			}
 		}
 		if (found_file_field_codes > 1) {
-			print "xdg-open: More than one file field codes (%f, %F, %u, %U) in Exec key, this .desktop file is invalid!" >> "/dev/stderr";
-			exit 1
+			error("xdg-open: More than one file field codes (%f, %F, %u, %U) in Exec key, this .desktop file is invalid!");
 		}
 		expanded_args[eargc] = expanded_arg;
 		eargc = eargc + 1;
@@ -610,6 +613,7 @@ END {
 		eargc = eargc + 1;
 	}
 
+	printf("cmd\0");
 	for (i=0; expanded_args[i]; i++) {
 		debug(1, "Arg: " expanded_args[i]);
 		printf("%s\0", expanded_args[i]);
@@ -619,10 +623,15 @@ END {
 AWKEOF
 )"
 
+
 # (desktop_file, file, uri (optional))
 open_with_desktop_file()
 {
-	awk -v"hostname=$(get_hostname)" -v"file_arg=$2" -v"uri_arg=$3" "$awk_script_open_with_desktop_file" < "$1" | xargs -0 -x sh -c 'exec "$@"' -
+	# shellcheck disable=SC2016 # Not expanding is intended here
+	awk -v"hostname=$(get_hostname)" -v"file_arg=$2" -v"uri_arg=$3" "$awk_script_open_with_desktop_file" < "$1" | xargs -0 -x sh -c 'if [ "$1" = "cmd" ] ; then shift; exec "$@" ; else exit 4 ; fi' -
+	if [ "$?" -eq 123 ] ; then
+		exit_failure_operation_failed
+	fi
 }
 
 #(application, directory, target_file, target_url (optional))
