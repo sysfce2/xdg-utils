@@ -1,0 +1,61 @@
+.templates_sha: &templates_sha e0b27048d7ba881e3bfec48f4f7cba6504a7472e
+
+include:
+  - project: 'freedesktop/ci-templates'
+    ref: *templates_sha
+    file: '/templates/alpine.yml'
+
+stages:
+  - prep
+  - build
+  - shellcheck
+
+variables:
+  FDO_UPSTREAM_REPO: xdg/xdg-utils
+
+.shellcheck-image:
+  variables:
+    FDO_DISTRIBUTION_VERSION: edge
+    FDO_DISTRIBUTION_TAG: shellcheck-image-1.0.3
+
+build-shellcheck-image:
+  
+  extends:
+    - .fdo.container-build@alpine
+    - .shellcheck-image
+  stage: prep
+  variables:
+    FDO_DISTRIBUTION_PACKAGES: 'shellcheck make xmlto lynx'
+
+build:
+  extends:
+    - .fdo.distribution-image@alpine
+    - .shellcheck-image
+  stage: build
+  script:
+    - ./configure
+    - make
+  artifacts:
+    paths:
+      - scripts/xdg-*
+    exclude:
+      - scripts/xdg-*.in
+
+run-shellcheck:
+
+  extends:
+    - .fdo.distribution-image@alpine
+    - .shellcheck-image
+  stage: shellcheck
+  dependencies:
+    - build
+  script:
+    - sh scripts/shellcheck-xdg-util.sh scripts/xdg-open.in
+
+workflow:
+  # Rules from https://gitlab.freedesktop.org/freedesktop/freedesktop/-/wikis/GitLab-CI#for-project-developers
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
