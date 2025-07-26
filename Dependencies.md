@@ -13,6 +13,16 @@ This document aims to guide package maintainers and developers through the depen
 * `xdg-screensaver` last evaluated at `0f6385262`
 * `xdg-settings` last evaluated at `0f6385262`
 
+## Build dependencies
+
+To successfully build the xdg-utils using `./configure` and `make` the following dependencies are needed:
+
+* `make`
+* `xmlto` for bulding the documentation
+* One of `lynx`, `w3m` or `links` to render the documentation to plain text
+
+If you are a developer please also install `shellcheck` to be able to use `scripts/shellcheck-xdg-util.sh`.
+
 ## Always Expected dependencies
 
 All xdg-utils rely on a POSIX compliant shell being available via `/bin/sh`.
