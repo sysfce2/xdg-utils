@@ -49,7 +49,9 @@ The following tools are included in xdg-utils 1.2:
 
 While the xdg-utils are shellscripts they are not ready to be used as is.
 
-Run `make` in the root directory of this repository to build [scripts and documentation](scripts).
+Run `./configure` and `make` in the root directory of this repository to build [scripts and documentation](scripts).
+
+You can find the [build-dependencies in Dependencies.md](./Dependencies.md#build-dependencies).
 
 ### Installing
 
@@ -71,7 +73,7 @@ That would cause the scripts to be installed to `<your-place-here>/bin`
 
 Please consider making yourself familiar with how to package for a given distribution
 and the recommend tooling before writing a custom installer.
-Even a beinner level package is in most cases better than a "run me as root" install script.
+Even a beginner level package is in most cases better than a "run me as root" install script.
 (especially if you support only one or a handful of distributions anyway)
 
 That said …
