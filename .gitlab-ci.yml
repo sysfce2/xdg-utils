@@ -51,6 +51,7 @@ run-shellcheck:
     - build
   script:
     - sh scripts/shellcheck-xdg-util.sh scripts/xdg-open.in
+    - sh scripts/shellcheck-xdg-util.sh scripts/xdg-realpath.in
 
 workflow:
   # Rules from https://gitlab.freedesktop.org/freedesktop/freedesktop/-/wikis/GitLab-CI#for-project-developers
