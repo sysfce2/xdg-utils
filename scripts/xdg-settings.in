@@ -299,7 +299,19 @@ set_browser_kde()
 # ()
 read_deepin_browser()
 {
-    dbus-send --print-reply=literal --dest=com.deepin.daemon.Mime /com/deepin/daemon/Mime com.deepin.daemon.Mime.GetDefaultApp string:"x-scheme-handler/http" | jq -r '.Id'
+    # since deepin 23, there is no GetDefaultApp method, we use mime to read
+    ret=`get_browser_mime "x-scheme-handler/http"`
+    if [ -z "$ret" ]; then
+        # older deepin versions
+        dbus-send --print-reply=literal --dest=com.deepin.daemon.Mime /com/deepin/daemon/Mime com.deepin.daemon.Mime.GetDefaultApp string:"x-scheme-handler/http" | jq -r '.Id'
+        if [ $? -ne 0 ]; then
+            exit_failure_operation_failed
+        else
+            exit_success
+        fi
+    fi
+
+    echo "$ret"
 }
 
 # ()
@@ -318,10 +330,15 @@ get_browser_deepin()
 check_browser_deepin()
 {
     if [ "$(read_deepin_browser)" = "$1" ]; then
+        echo yes
         exit_success
     else
+        echo no
         exit_failure_operation_failed
     fi
+
+    exit_success
+    echo yes
 }
 
 # (desktop_file_name)
