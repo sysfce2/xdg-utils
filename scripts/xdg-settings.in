@@ -300,7 +300,7 @@ set_browser_kde()
 read_deepin_browser()
 {
     # since deepin 23, there is no GetDefaultApp method, we use mime to read
-    ret=`get_browser_mime "x-scheme-handler/http"`
+    ret="$(get_browser_mime "x-scheme-handler/http")"
     if [ -z "$ret" ]; then
         # older deepin versions
         dbus-send --print-reply=literal --dest=com.deepin.daemon.Mime /com/deepin/daemon/Mime com.deepin.daemon.Mime.GetDefaultApp string:"x-scheme-handler/http" | jq -r '.Id'
