@@ -1,12 +1,37 @@
 === xdg-utils NOT YET RELEASED ===
+
+2025-08-23 Slatian
+  * xdg-open: Reimplement the .desktop file handling of the generic opener in awk (!147)
+
+2025-08-20 deng bo
+  * xdg-settings: fix deepin browser detection for newer versions (!152)
+
+2025-06-26 Slatian
+  * all: Document build dependencies (!149, !150)
+
+2025-06-12 Slatian
+  * all: Set up GitlabCI for shellchecking (!148)
+
+2025-06-16 Slatian
+  * all: Fix shellcheck getting confused by incomplete code (!144, #280)
+  * all:  Add xdg-settings to README, document how to shellcheck,
+    clarify issue template (!145, #9)
+  * xdg-open: Remove redundant shift that would have resulted in missed cli arguments. (!146)
+
+2025-06-08 Reuben Thomas
+  * xdg-open: support multiple arguments (!139, #96)
+
 2025-05-10 Slatian
   * xdg-mail: No longer handle `attach` in mailto URLs (!89, #177, CVE-2020-27748)
   * all: shellcheck (!132)
   * xdg-open: Unknown KDE versions now use the generic opener instead of failing
     (!134, #273)
-  * all: Add `XDG_UTILS_OVERRIDE_DE` and tool specific overrides (!113, #240)
+  * all: Add `XDG_UTILS_OVERRIDE_DE` and tool specific overrides (!112, #240)
   * xdg-screensaver: Allow using `org.freedesktop.ScreenSaver` independent of desktop
     (!133, #261)
+  * all: Document function signatures for common, open, mime and settings (!136)
+  * xdg-screensaver: Document `xprop` as a hard requirement (!142, #93)
+  * xdg-settings: Fix setting a URL scheme handler reassociating text/html for lxqt (!143)
 
 2025-05-10 Reuben Thomas
   * all: Remove no longer needed xprop fingerprinting that impacted performance
