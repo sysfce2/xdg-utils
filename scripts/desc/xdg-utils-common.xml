@@ -178,6 +178,7 @@
 				<listitem><para><code>wsl</code></para></listitem>
 				<listitem><para><code>darwin</code></para></listitem>
 				<listitem><para><code>flatpak</code></para></listitem>
+				<listitem><para><ulink url="https://containertoolbx.org/"><code>toolbx</code></ulink></para></listitem>
 				<listitem><para><code>generic</code></para></listitem>
 			</itemizedlist>
 		</refsect2>

@@ -253,7 +253,7 @@ open_enlightenment()
 }
 
 # (url_or_path)
-open_flatpak()
+open_gdbus()
 {
     if is_file_url_or_path "$1"; then
         local file
@@ -899,8 +899,8 @@ open_one_argument()
             open_darwin "$url"
             ;;
 
-        flatpak)
-            open_flatpak "$url"
+        flatpak|toolbx)
+            open_gdbus "$url"
             ;;
 
         wsl)

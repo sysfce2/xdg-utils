@@ -251,7 +251,7 @@ open_envvar()
     exit_failure_operation_failed
 }
 
-open_flatpak()
+open_gdbus()
 {
     gdbus call --session \
         --dest org.freedesktop.portal.Desktop \
@@ -495,10 +495,10 @@ case "$DE" in
     open_xfce "${mailto}"
     ;;
 
-    flatpak)
+    flatpak|toolbx)
 	[ -z "$attach" ] || \
 		exit_failure_operation_impossible "Unable to use --attach from inside a flatpak"
-    open_flatpak "${mailto}"
+    open_gdbus "${mailto}"
     ;;
 
     generic|enlightenment)

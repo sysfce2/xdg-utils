@@ -354,6 +354,13 @@ detectDE()
         return
     fi
 
+    # Check for toolbx first; as this runs "inside" an existing
+    # environment.
+    if [ -f /run/.toolboxenv ]; then
+       DE="toolbx"
+       return
+    fi
+
     IFS=:
     for desktop in $XDG_CURRENT_DESKTOP ; do
       unset IFS
