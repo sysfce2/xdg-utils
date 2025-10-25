@@ -616,6 +616,11 @@ set_browser_xfce()
         rm -f "$temp"
         return 1
     fi
+
+	# For the xfce4 setting to work across all freedesktop applications
+	# the opener for http(s) URLs must be xfce4.
+	echo "Setting browser to xfce4-web-browser.desktop to make setting effective ..."
+	set_browser_generic "xfce4-web-browser.desktop"
 }
 
 # }}} xfce
@@ -720,12 +725,6 @@ set_browser_generic()
 # }}} default browser
 
 # {{{ default url scheme handler
-
-exit_unimplemented_default_handler()
-{
-    exit_failure_operation_impossible "default-url-scheme-handler not implemented for $DE"
-}
-
 # {{{ KDE
 
 # Recent versions of KDE support default scheme handler applications using the
@@ -931,19 +930,52 @@ set_url_scheme_handler_gnome3()
 # (scheme)
 get_url_scheme_handler_xfce()
 {
-    exit_unimplemented_default_handler "$1"
+	# Fall back to default behavior
+	get_url_scheme_handler_generic "$@"
 }
 
 # (scheme, desktop_file_name)
 check_url_scheme_handler_xfce()
 {
-    exit_unimplemented_default_handler "$1"
+	# Fall back to default behavior
+	check_url_scheme_handler_generic "$@"
 }
 
 # (scheme, desktop_file_name)
 set_url_scheme_handler_xfce()
 {
-    exit_unimplemented_default_handler "$1"
+	case "$1" in
+		http|https)
+			echo "---" >&2
+			echo "Warning: By setting a custom handler for $1 under xfce4" >&2
+			echo "you are bypassing the xfce4 default browser setting." >&2
+			echo "This is a bad idea because it may result in inconsistent URL handling." >&2
+			echo "You can fix this by using the following command:" >&2
+			echo "    xdg-settings set default-web-browser '$2'" >&2
+			echo "---" >&2
+			;;
+		mailto|trash)
+			handler="xfce4-mail-reader.desktop"
+			setting="mail reader"
+			if [ "$1" = "trash" ] ; then
+				handler="xfce4-file-manager.desktop"
+				setting="file manager"
+			fi
+			echo "---" >&2
+			echo "Warning: By setting a custom handler for $1 under xfce4" >&2
+			echo "you are bypassing the xfce4 default $setting setting." >&2
+			echo "This is a bad idea because it may result in inconsistent URL handling." >&2
+			echo "Currently there is no way to use xdg-settings to fix this." >&2
+			echo "Please consider using xfce4 specific tooling." >&2
+			echo "You can revert your change to the xfce4 default using the follwing command:" >&2
+			echo "    xdg-settings set default-url-scheme-handler $1 $handler" >&2
+			echo "Contributions to fix this are welcome!"
+			echo "---" >&2
+			;;
+
+	esac
+	# Fall back to default behavior
+	set_url_scheme_handler_generic "$@"
 }
 
 # }}} xfce
