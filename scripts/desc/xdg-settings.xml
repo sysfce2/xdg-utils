@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl"
    href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
-<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+    "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
 <refentry id="xdg-settings">
   <refentryinfo>
@@ -32,20 +32,34 @@
     <cmdsynopsis>
       <command>xdg-settings</command>
       <group choice="req">
-        <arg choice="plain"><option><replaceable>get</replaceable></option></arg>
-        <arg choice="plain"><option><replaceable>check</replaceable></option></arg>
-        <arg choice="plain"><option><replaceable>set</replaceable></option></arg>
+        <arg choice="plain">get</arg>
+        <arg choice="plain">check</arg>
+        <arg choice="plain">set</arg>
       </group>
-      <group choice="req">
-	<option>property</option>
-      </group>
-      <group choice="opt">
-        <option>subproperty</option>
-      </group>
-      <group choice="opt">
-	<option>value</option>
-      </group>
+      <arg choice="plain">
+        <replaceable>property</replaceable>
+      </arg>
+      <arg choice="opt">
+        <replaceable>subproperty</replaceable>
+      </arg>
+      <arg choice="opt">
+        <replaceable>value</replaceable>
+      </arg>
     </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-settings</command>
+      <arg choice="plain"><replaceable>verb</replaceable></arg>
+      <arg choice="plain">default-web-browser</arg>
+      <arg choice="opt"><replaceable>desktop-file.desktop</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-settings</command>
+      <arg choice="plain"><replaceable>verb</replaceable></arg>
+      <arg choice="plain">default-url-scheme-handler</arg>
+      <arg choice="plain"><replaceable>scheme</replaceable></arg>
+      <arg choice="opt"><replaceable>desktop-file.desktop</replaceable></arg>
+    </cmdsynopsis>
+
     <cmdsynopsis>
       <command>xdg-settings</command>
       <group choice="req">
@@ -70,6 +84,35 @@
       xdg-settings is for use inside a desktop session only.
       It is not recommended to use xdg-settings as root.
     </para>
+  </refsect1>
+  <refsect1 id="verbs">
+    <title>Verbs</title>
+    <variablelist>
+      <varlistentry>
+        <term>get</term>
+        <listitem>
+          <simpara>
+            Query the value of the given property and subproperty.
+          </simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>check</term>
+        <listitem>
+          <para>
+            Test wheter the given value equals the value of the given property and subproperty. Returns <literal>yes</literal> or <literal>no</literal> on stdout. If this depends on multiple settings this may seem to conflict with the output of <code>get</code>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>set</term>
+        <listitem>
+          <simpara>
+            Set the property and subproperty to the given value.
+          </simpara>
+        </listitem>
+      </varlistentry>
+    </variablelist>
   </refsect1>
   <refsect1 id="options">
     <title>Options</title>
