@@ -394,6 +394,9 @@ detectDE()
          XFCE)
            DE=xfce
            ;;
+         Budgie)
+           DE=budgie
+           ;;
          X-Generic)
            DE=generic
            ;;

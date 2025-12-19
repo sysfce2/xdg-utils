@@ -1138,7 +1138,7 @@ case "$DE" in
     dispatch_specific gnome "$@"
     ;;
 
-    gnome3|cinnamon|lxde|mate)
+    gnome3|cinnamon|lxde|mate|budgie)
     dispatch_specific gnome3 "$@"
     ;;
 

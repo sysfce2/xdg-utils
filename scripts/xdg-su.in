@@ -198,7 +198,7 @@ case "$DE" in
     su_kde
     ;;
 
-    gnome*|cinnamon|lxde|mate|deepin)
+    gnome*|cinnamon|lxde|mate|deepin|budgie)
     su_gnome
     ;;
 

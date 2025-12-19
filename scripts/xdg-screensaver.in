@@ -134,6 +134,17 @@ perform_action()
     xfce)
       [ -n "$DISPLAY" ] && screensaver_xserver "$1"
       ;;
+    
+    budgie)
+        case "${BUDGIE_SESSION_VERSION}" in
+            10.9*)
+            screensaver_gnome_screensaver "$1"
+            ;;
+            *)
+            exit_failure_operation_impossible "xdg-screensaver is unsupported for Budgie ${BUDGIE_SESSION_VERSION}"
+            ;;
+        esac
+        ;;
 
     ''|generic)
       [ -n "$DISPLAY" ] && screensaver_xserver "$1"

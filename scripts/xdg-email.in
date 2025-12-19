@@ -481,7 +481,7 @@ case "$DE" in
     open_gnome "${mailto}" "$attach"
     ;;
 
-    gnome3|cinnamon|lxde|mate|deepin)
+    gnome3|cinnamon|lxde|mate|deepin|budgie)
     open_gnome3 "${mailto}" "$attach"
     ;;
 

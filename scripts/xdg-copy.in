@@ -98,7 +98,7 @@ case "$DE" in
     copy_kde "$source" "$dest"
     ;;
 
-    gnome*|cinnamon|lxde|mate|xfce)
+    gnome*|cinnamon|lxde|mate|xfce|budgie)
     copy_gnome "$source" "$dest"
     ;;
 

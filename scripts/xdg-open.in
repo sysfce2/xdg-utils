@@ -872,7 +872,7 @@ open_one_argument()
             open_deepin "$url"
             ;;
 
-        gnome3|cinnamon)
+        gnome3|cinnamon|budgie)
             open_gnome3 "$url"
             ;;
 

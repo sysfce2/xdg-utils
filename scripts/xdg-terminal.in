@@ -263,7 +263,7 @@ case "$DE" in
     terminal_gnome "$command"
     ;;
 
-    gnome3)
+    gnome3|budgie)
     terminal_gsettings org.gnome.desktop.default-applications.terminal "$command"
     ;;
 
