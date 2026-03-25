@@ -52,8 +52,8 @@ You want to use the `<code>` tag which requires DocBook 4.3.
 Replace the lines …
 
 ```xml
-<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+    "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
 ```
 
