@@ -329,6 +329,7 @@ BEGIN {
 	in_main_section = 0;
 
 	exec_value = 0;
+	term_value = 0;
 	icon_value = 0;
 	name_value = 0;
 }
@@ -515,6 +516,8 @@ in_main_section && match($0, /^[^#=\[]+\[?[^=\]]*\]?=/) {
 	debug(4, "Key: " key " Local: " local " Value: " value);
 	if (key == "Exec") {
 		exec_value = unescape_value(value);
+	} else if (key == "Terminal") {
+		term_value = value;
 	} else if (key == "Icon") {
 		icon_value = unescape_value(value);
 	} else if (key == "Name") {
@@ -535,6 +538,10 @@ END {
 	# Field code expansion
 	expanded_args[0] = "";
 	eargc = 0;
+	if (term_value == "true") {
+		expanded_args[0] = "xdg-terminal";
+		eargc = 1;
+	}
 	found_file_field_codes = 0;
 	for (i=0; args[i]; i++) {
 		arg = args[i];
