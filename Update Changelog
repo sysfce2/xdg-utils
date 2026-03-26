@@ -1,5 +1,26 @@
 === xdg-utils NOT YET RELEASED ===
 
+2026-03-26 Simon Lees
+  * all: Use docbook V4.3 (#295)
+
+2026-03-26 Callum Farmer
+  * all: Initial support for Budgie Desktop 
+
+2026-03-26 eylles
+  * xdg-terminal: handle Terminal=true
+
+2026-03-26 Slatian
+  * xdg-settings: improve manpage
+
+2026-03-26 Slatian
+  * xdg-settings: set-default-url-handler for xfce4 
+
+2025-08-23 Slatian
+  * xdg-open: Allow use of --
+
+2025-10-15 Ian Wienand
+  * xdg-open: support toolbx
+
 2025-08-23 Slatian
   * xdg-open: Reimplement the .desktop file handling of the generic opener in awk (!147)
 
