@@ -952,7 +952,7 @@ err=0
 
 # (arg, remaining_args)
 handle_positional_arg() {
-	echo "remaining: $2"
+	DEBUG 2 "remaining: $2"
 	if [ "$2" -gt 0 ] || [ "$NOWAIT" = 1 ]; then
 		(open_one_argument "$1" &)
 	else
